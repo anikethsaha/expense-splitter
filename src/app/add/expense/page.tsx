@@ -1,16 +1,17 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
+
+import React from "react";
 import { AppContainer } from "src/components/organisms/Layout/AppContainer";
 import { AuthLayer } from "src/components/organisms/Layout/AuthLayer";
-import { HomeScreen } from "src/components/templates/Home";
+import { CreateSplit } from "src/components/templates/Split/CreateSplit";
 
-export default function Home() {
+export const CreateExpenseScreen = () => {
   return (
     <AppContainer>
       <AuthLayer>
-        <HomeScreen />
+        <CreateSplit />
       </AuthLayer>
     </AppContainer>
   );
-}
+};
+export default CreateExpenseScreen;
