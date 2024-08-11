@@ -7,10 +7,6 @@ PouchDB.plugin(PouchDBFind);
 
 export enum SplitType {
   EQUAL = "EQUAL",
-  CUSTOM = "CUSTOM",
-}
-
-export enum CustomSplitType {
   PERCENTAGE = "PERCENTAGE",
   ABSOLUTE = "ABSOLUTE",
 }
@@ -20,8 +16,10 @@ export enum FrontendSplitType {
   BORROW = "BORROW",
 }
 
-export type CustomSplitInfo = {
-  type: CustomSplitType;
+export type SplitInfoType = {
+  [key in SplitType]?: {
+    memberAmount: { [key: string]: { amount?: number; percentage?: number } };
+  };
 };
 
 export interface Split {
@@ -31,18 +29,16 @@ export interface Split {
   desc: string;
   paid_by: string;
   split_type: SplitType;
-  custom_split_info?: CustomSplitInfo;
-  expenses: Expense[];
+  split_info: SplitInfoType;
+  expenses: string[];
   group_id?: string;
   created_at: Date;
   updated_at: Date;
 }
 
 // these props should be fill by frontend hooks
-export interface FrontendSplit extends Split {
-  paid_by_user: User;
+export interface FrontendSplit extends Omit<Split, "expenses"> {
   expenses: FrontendExpense[];
-  type: FrontendSplitType;
 }
 
 export const SPLIT_DB_NAME = "split";

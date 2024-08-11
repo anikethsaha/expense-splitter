@@ -2,7 +2,7 @@ import React from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { MdOutlineClose } from "react-icons/md";
 
-import { Input } from "src/components/atoms/Input";
+import { Input, InputProps } from "src/components/atoms/Input";
 import { v4 as uuidv4 } from "uuid";
 import { Group } from "src/models/Group";
 import { User } from "src/models/user";
@@ -13,7 +13,7 @@ import {
   TextSmall,
 } from "src/components/atoms/Typography/Typography";
 import { useSplit } from "src/hooks/useSplit";
-import { on } from "events";
+
 import { UserListItem } from "src/components/atoms/ListItems/UserListItem";
 import { GroupListItem } from "src/components/atoms/ListItems/GroupListItem";
 
@@ -31,8 +31,10 @@ const OptionDropdownContainer = styled.div`
   border-radius: 8px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
-
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: -1px 4px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e0e0;
+  border-top: 0;
+  box-sizing: border-box;
 `;
 
 /**
@@ -47,6 +49,8 @@ export const ExpensePlayerInput: React.FC<{
   onUserDeSelect?: (user: Partial<User>) => void;
   preselectSelectedUsers?: Partial<User>[];
   preselectSelectedGroup?: Group;
+  noGroup?: boolean;
+  inputProps?: InputProps;
 }> = ({
   onGroupSelect,
   onUserSelect,
@@ -54,6 +58,8 @@ export const ExpensePlayerInput: React.FC<{
   onGroupDeSelect,
   preselectSelectedUsers,
   preselectSelectedGroup,
+  inputProps,
+  noGroup = false,
 }) => {
   const { brand } = useTheme();
   const { loading, getAllPlayersByString } = useSplit(false, (err) => {
@@ -101,11 +107,27 @@ export const ExpensePlayerInput: React.FC<{
     onGroupDeSelect?.(group);
   };
 
+  const dropdownOpened =
+    userOptions.length > 0 || loading || groupOptions?.length > 0;
+
   return (
     <Container>
       <Input
-        label="With you and "
-        placeholder="Enter phone number or name or group name"
+        {...inputProps}
+        style={{
+          borderColor: "#e1e0e0",
+          ...(dropdownOpened
+            ? {
+                bordeBbottom: 0,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+              }
+            : {}),
+        }}
+        label={inputProps?.label ?? "With you and "}
+        placeholder={`Enter phone number or name ${
+          noGroup ? "" : "or group name"
+        }`}
         type="text"
         onChange={onInputChange}
         rightElement={
@@ -115,7 +137,7 @@ export const ExpensePlayerInput: React.FC<{
                 setUserOptions([]);
                 setGroupOptions([]);
               }}
-              size={24}
+              size={20}
               color={brand.primary}
             />
           ) : undefined
@@ -143,19 +165,20 @@ export const ExpensePlayerInput: React.FC<{
               }
             />
           ))}
-          {groupOptions?.map((group, i) => (
-            <GroupListItem
-              showRadioButton
-              isLast={i === groupOptions.length - 1}
-              group={group}
-              key={group.id}
-              onSelect={() => handleGroupSelect(group)}
-              preSelected={
-                preselectSelectedGroup?.id === group.id ? true : false
-              }
-              onDeSelected={() => handleGroupDeSelect(group)}
-            />
-          ))}
+          {!noGroup &&
+            groupOptions?.map((group, i) => (
+              <GroupListItem
+                showRadioButton
+                isLast={i === groupOptions.length - 1}
+                group={group}
+                key={group.id}
+                onSelect={() => handleGroupSelect(group)}
+                preSelected={
+                  preselectSelectedGroup?.id === group.id ? true : false
+                }
+                onDeSelected={() => handleGroupDeSelect(group)}
+              />
+            ))}
         </OptionDropdownContainer>
       )}
       <Toaster />

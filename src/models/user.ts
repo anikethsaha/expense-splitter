@@ -3,6 +3,7 @@ import PouchDBFind from "pouchdb-find";
 import { seedUsersIfNeeded } from "src/seed";
 
 PouchDB.plugin(PouchDBFind);
+PouchDB.plugin(require("pouchdb-upsert"));
 
 export type User = {
   id: string;
@@ -25,4 +26,4 @@ userDbInstance.createIndex(
   }
 );
 
-seedUsersIfNeeded();
+// seedUsersIfNeeded();

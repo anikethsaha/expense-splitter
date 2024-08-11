@@ -14,6 +14,7 @@ import styled from "styled-components";
 import { FriendSplitList } from "src/components/organisms/Friends/FriendSplitList";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FloatingButton } from "src/components/molecules/FloatingButton";
+import { GroupList } from "src/components/organisms/Group/GroupList";
 
 const Container = styled.div`
   display: flex;
@@ -35,9 +36,9 @@ export const HomeScreen = () => {
 
   const onAddClick = useCallback(() => {
     if (currTabId === "friends") {
-      router.replace("/add/friend");
+      router.push("/add/friend");
     } else if (currTabId === "groups") {
-      router.replace("/groups");
+      router.push("/add/group");
     }
   }, [currTabId]);
 
@@ -46,7 +47,7 @@ export const HomeScreen = () => {
   };
 
   const onAddExpenseClick = () => {
-    router.replace("/add/expense");
+    router.push("/add/expense");
   };
 
   return (
@@ -59,7 +60,8 @@ export const HomeScreen = () => {
         <Tabs onTabChange={onTabChange} list={TAB_DATA} />
       </BaseScreenPadding>
 
-      <FriendSplitList />
+      {currTabId === "friends" && <FriendSplitList />}
+      {currTabId === "groups" && <GroupList />}
       <FloatingButton
         trailingIcon={(props) => <FaRegSquarePlus {...props} />}
         text={"Add expense"}

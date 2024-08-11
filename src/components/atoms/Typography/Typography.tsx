@@ -13,12 +13,17 @@ export const LIGHT_THEME = {
   },
   gray: {
     medium: "#e4e4e4",
+    light: "#EFF1F5",
   },
   base: {
     base1: "#7F8790",
     base2: "#8F92A1",
     base3: `#F8F8F8`,
     baseDarker1: "#575757",
+    baseLighter1: "#c7c7c7",
+  },
+  stroke: {
+    light: "#e1e0e0",
   },
 };
 

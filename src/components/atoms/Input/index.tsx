@@ -3,28 +3,38 @@ import { debounce } from "src/utils/debounce";
 import styled, { useTheme } from "styled-components";
 import {
   DEFAULT_THEME,
+  TextSmall,
   TitleSmall,
   typographyStyles,
 } from "../Typography/Typography";
 
-interface InputProps {
+export interface OwnInputProps {
   defaultValue?: string;
   placeholder?: string;
   onChange?: (value: string) => void;
-  type: "text" | "number";
+  type?: "text" | "number";
   inputColor?: string;
   label?: string;
   rightElement?: React.ReactNode;
+  size?: "default" | "small";
 }
+export type InputProps = OwnInputProps &
+  React.InputHTMLAttributes<HTMLInputElement>;
 
-const InputContainer = styled.input<{ color?: string }>`
+const InputContainer = styled.input<{
+  color?: string;
+  size?: InputProps["size"];
+}>`
   width: 100%;
-  border: 1px solid #b9b9b9;
+  border: 1px solid ${(props) => props.theme.stroke.light};
   border-radius: 4px;
   padding: 4px 12px;
-  height: 48px;
+  height: ${(props) => (props.size === "small" ? 32 : 48)}px;
   box-sizing: border-box;
-  font-size: ${typographyStyles.titleSmall.fontSize};
+  font-size: ${(props) =>
+    props.size === "small"
+      ? typographyStyles.textSmall.fontSize
+      : typographyStyles.titleSmall.fontSize};
   font-weight: 400;
   font-style: ${typographyStyles.titleMedium.fontStyle};
   line-height: ${typographyStyles.titleMedium.lineHeight};
@@ -43,26 +53,24 @@ const InputContainer = styled.input<{ color?: string }>`
   }
 `;
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.div<{ size?: InputProps["size"] }>`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  position: relative
+  position: relative;
   width: 100%;
 `;
 
-const RightContainer = styled.div`
+const RightContainer = styled.div<{ size?: InputProps["size"] }>`
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  bottom: ${(props) => (props.size ? 6 : 14)}px;
 `;
 
-export const Input: React.FC<
-  InputProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">
-> = ({
+export const Input: React.FC<InputProps> = ({
   defaultValue = "",
   placeholder = "",
   onChange,
@@ -70,6 +78,7 @@ export const Input: React.FC<
   inputColor,
   label,
   rightElement,
+  size = "default",
   ...inputProps
 }) => {
   const { base } = useTheme();
@@ -93,11 +102,14 @@ export const Input: React.FC<
     debouncedOnChange(newValue);
   };
 
+  const Text = size === "small" ? TextSmall : TitleSmall;
+
   return (
-    <InputWrapper>
-      {label && <TitleSmall color={base.base2}>{label}</TitleSmall>}
+    <InputWrapper size={size}>
+      {label && <Text color={base.base2}>{label}</Text>}
       <InputContainer
         {...inputProps}
+        size={size}
         color={inputColor}
         type={type}
         value={value}
@@ -105,7 +117,9 @@ export const Input: React.FC<
         onChange={handleDebounceChange}
         onBlur={handleBlur}
       />
-      {rightElement && <RightContainer>{rightElement}</RightContainer>}
+      {rightElement && (
+        <RightContainer size={size}>{rightElement}</RightContainer>
+      )}
     </InputWrapper>
   );
 };

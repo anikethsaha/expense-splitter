@@ -30,7 +30,7 @@ export const EXPENSE_DB_NAME = "expense";
 export const expenseDbInstance = new PouchDB<Expense>(EXPENSE_DB_NAME);
 expenseDbInstance.createIndex(
   {
-    index: { fields: ["borrower_id"] },
+    index: { fields: ["borrower_id", "lender_id"] },
   },
   (err) => {
     if (err) {

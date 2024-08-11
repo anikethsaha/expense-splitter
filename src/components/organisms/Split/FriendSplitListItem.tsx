@@ -41,10 +41,13 @@ export const FriendSplitListItem: React.FC<{
   );
 
   useEffect(() => {
-    getExpenseWithFriend(friend.id).then((expenses) => {
+    if (!loggedInUser) return;
+    const friendId =
+      loggedInUser.id === friend.user_1 ? friend.user_2 : friend.user_1;
+    getExpenseWithFriend(friendId).then((expenses) => {
       if (expenses) setExpenses([...expenses]);
     });
-  }, []);
+  }, [loggedInUser]);
 
   const { isLending, amount } = useMemo(
     () => calculateOwingOrLending(expenses),

@@ -8,12 +8,13 @@ import { TitleMedium } from "src/components/atoms/Typography/Typography";
 import styled, { useTheme } from "styled-components";
 import { IconType } from "react-icons";
 
-const Container = styled.div`
+const Container = styled.div<{ isProgress?: boolean }>`
   display: flex;
   flex-direction: row;
   height: 48px;
   width: 100%;
-  border-top: 3px solid ${(props) => props.theme.brand.primary};
+  border-top: ${(props) => (props.isProgress ? 0 : 3)}px solid
+    ${(props) => props.theme.brand.primary};
   padding: 16px 16px 12px;
 
   box-sizing: border-box;
@@ -34,11 +35,22 @@ const TitleWrapper = styled.div`
   align-items: center;
 `;
 
+const ProgressBar = styled.div<{ progress: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: ${(props) => props.progress}%;
+  background-color: ${(props) => props.theme.brand.primary};
+  transition: width 0.5s;
+`;
+
 export const Navbar: React.FC<{
   hideActions?: boolean;
   onBack?: () => void;
   onAddClick?: () => void;
-}> = ({ hideActions = false, onBack, onAddClick }) => {
+  progress?: number;
+}> = ({ hideActions = false, onBack, onAddClick, progress }) => {
   const { brand } = useTheme();
 
   const onSettingsClick = () => {
@@ -46,7 +58,8 @@ export const Navbar: React.FC<{
   };
 
   return (
-    <Container>
+    <Container isProgress={!!progress}>
+      {!!progress && <ProgressBar progress={progress} />}
       <TitleWrapper>
         {!!onBack && <IoIosArrowRoundBack size={24} color={brand.primary} />}
         <TitleMedium color={brand.primary}>Split Expense</TitleMedium>

@@ -3,6 +3,7 @@ import { useLoggedInUser } from "src/stores/User.store";
 import { ExpenseRepo } from "src/repos/ExpenseRepo";
 import { useRouter } from "next/navigation";
 import { Expense, Status } from "src/models/Expense";
+import { ExpenseHelper } from "src/helpers/ExpenseHelper";
 
 const expenseRepo = new ExpenseRepo();
 
@@ -25,6 +26,7 @@ export const useExpense = (
       setLoading(true);
 
       try {
+        console.log({ currentUser });
         const expenses = await expenseRepo.findExpensesBetweenUsers(
           currentUser.id,
           userId
@@ -42,28 +44,7 @@ export const useExpense = (
   const calculateOwingOrLending = useCallback(
     (expenses: Expense[]) => {
       if (!currentUser) return { isLending: false, amount: 0 };
-
-      let totalLent = 0;
-      let totalOwed = 0;
-      const openExpenses = expenses.filter(
-        (expense) => expense.status === Status.OPEN
-      );
-      openExpenses.forEach((expense) => {
-        if (expense.status === "OPEN") {
-          if (expense.lender_id === currentUser.id) {
-            totalLent += expense.amount;
-          } else if (expense.borrower_id === currentUser.id) {
-            totalOwed += expense.amount;
-          }
-        }
-      });
-
-      const balance = totalLent - totalOwed;
-      const result = {
-        isLending: balance > 0,
-        amount: Math.abs(balance),
-      };
-
+      const result = ExpenseHelper.calculateMyStatus(currentUser, expenses);
       return result;
     },
     [currentUser]

@@ -7,7 +7,6 @@ PouchDB.plugin(PouchDBFind);
 export type Group = {
   id: string;
   name: string; // The name of the group
-  desc: string; // A description of the group
   user_ids: string[]; // An array of user IDs belonging to this group
   created_at: Date;
   updated_at: Date;

@@ -9,6 +9,14 @@ export class FriendRepo {
   }
 
   // Create a friend entry with the current logged-in user
+  /**
+   * only create a friend if it does not exist
+   * @param currentUserId
+   * @param currentUserName
+   * @param newFriendId
+   * @param newFriendName
+   * @returns
+   */
   async createFriend(
     currentUserId: string,
     currentUserName: string,
@@ -25,6 +33,19 @@ export class FriendRepo {
     };
 
     try {
+      // Check if the friend already exists
+      const existingFriend = await this.db.find({
+        selector: {
+          $or: [
+            { user_1: currentUserId, user_2: newFriendId },
+            { user_1: newFriendId, user_2: currentUserId },
+          ],
+        },
+      });
+      if (existingFriend.docs.length > 0) {
+        return existingFriend.docs[0];
+      }
+
       await this.db.put({ _id: friend.id, ...friend });
       return friend;
     } catch (error) {

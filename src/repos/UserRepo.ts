@@ -60,17 +60,20 @@ export class UserRepo {
   }
 
   // Update an existing user
-  async updateUser(user: User): Promise<PouchDB.Core.Response> {
+  async updateUser(user: User) {
     try {
-      const existingUser = await this.db.get(user.id);
-      const updatedUser = {
-        ...existingUser,
-        ...user,
-        updated_at: new Date().toISOString(), // Adding an updated_at field for tracking updates
-      };
-      const response = await this.db.put(updatedUser);
+      const id = user.id;
+      const updateUser = { ...user };
+      if (updateUser.id) delete updateUser["id"];
+      if (updateUser._rev) delete updateUser["_id"];
+      if (updateUser?._id) delete updateUser["_rev"];
+      console.log("updateUser upsert", { updateUser });
+      const response = await this.db.putIfNotExists(id, { ...updateUser });
+
+      console.log("updateUser upsert", { response });
       return response;
     } catch (error) {
+      console.log({ error });
       throw new Error("Failed to update user: " + error.message);
     }
   }

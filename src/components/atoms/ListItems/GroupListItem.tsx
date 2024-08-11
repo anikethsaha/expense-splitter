@@ -9,6 +9,7 @@ import { PiRadioButtonDuotone } from "react-icons/pi";
 
 import { OptionItem, UserAvatar } from "./common.styled";
 import { Group } from "src/models/Group";
+import { RadioButton } from "../RadioButton/RadioButton";
 
 export const GroupListItem: React.FC<{
   group: Partial<Group>;
@@ -18,6 +19,7 @@ export const GroupListItem: React.FC<{
   isLast?: boolean;
   showRadioButton?: boolean;
   preSelected?: boolean;
+  onClick?: () => void;
 }> = ({
   isLast,
   group,
@@ -26,6 +28,7 @@ export const GroupListItem: React.FC<{
   onDeSelected,
   showRadioButton,
   preSelected,
+  onClick,
 }) => {
   const { base, brand } = useTheme();
 
@@ -36,6 +39,7 @@ export const GroupListItem: React.FC<{
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        onClick?.();
       }}
     >
       <HiOutlineUserGroup size={24} color={base.base2} />
@@ -45,21 +49,11 @@ export const GroupListItem: React.FC<{
         <div className="right">
           <TextCaption>{group.user_ids?.length ?? 0} Members</TextCaption>
           {showRadioButton && (
-            <>
-              {preSelected ? (
-                <PiRadioButtonDuotone
-                  onClick={onDeSelected}
-                  size={20}
-                  color={brand.primary}
-                />
-              ) : (
-                <CgRadioCheck
-                  onClick={onSelect}
-                  size={20}
-                  color={brand.primary}
-                />
-              )}
-            </>
+            <RadioButton
+              preSelected={preSelected}
+              onDeSelected={onDeSelected!}
+              onSelect={onSelect!}
+            />
           )}
           {onDeleted && <MdOutlineDelete size={24} color={brand.primary} />}
         </div>

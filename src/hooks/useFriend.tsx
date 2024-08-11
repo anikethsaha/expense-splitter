@@ -20,6 +20,7 @@ export const useFriend = (
     async (phoneNumber: string, name?: string) => {
       setLoading(true);
       try {
+        console.log({ phoneNumber, name });
         return await userRepo.createOrUpdateUser(phoneNumber, name);
       } catch (error) {
         onError?.("Error creating or updating user: " + error);
@@ -77,6 +78,7 @@ export const useFriend = (
     setLoading(true);
     try {
       const friends = await friendRepo.getFriendList(currentUser.id);
+
       return friends;
     } catch (error) {
       onError?.("Error retrieving friend list: " + error);
