@@ -14,9 +14,16 @@ export type ButtonProps = {
   style?: React.CSSProperties;
   rightText?: string;
   rightElement?: React.ReactNode;
+  disabled?: boolean;
 };
 
-const ButtonWrapper = styled.button<{ type: string; hasRightText?: boolean }>`
+const ButtonWrapper = styled.button<{
+  type: string;
+  hasRightText?: boolean;
+  disabled?: boolean;
+}>`
+  cursor: pointer;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   background-color: ${(props) => props.theme.brand.primary};
   width: 100%;
   border-radius: 4px;
@@ -68,6 +75,7 @@ const Button: FC<ButtonProps> = ({
   rightText,
   rightElement,
   style,
+  disabled,
 }) => {
   const { brand, base } = useTheme();
   const handleHover = () => {
@@ -79,10 +87,11 @@ const Button: FC<ButtonProps> = ({
   return (
     <ButtonWrapper
       hasRightText={!!rightText || !!rightElement}
-      onClick={onClick}
+      onClick={disabled ? () => {} : onClick}
       onMouseEnter={handleHover}
       type={type}
       style={style}
+      disabled={disabled}
     >
       <LeftContainer hasRightText={!!rightText || !!rightElement}>
         {leadingIcon?.({

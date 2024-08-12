@@ -14,9 +14,9 @@ export class ExpenseHelper {
     openExpenses.forEach((expense) => {
       if (expense.status === Status.OPEN) {
         if (expense.lender_id === currentUser.id) {
-          totalLent += expense.amount;
+          totalLent += parseInt(expense.amount);
         } else if (expense.borrower_id === currentUser.id) {
-          totalOwed += expense.amount;
+          totalOwed += parseInt(expense.amount);
         }
       }
     });
@@ -24,7 +24,7 @@ export class ExpenseHelper {
     const balance = totalLent - totalOwed;
 
     const isLending = balance > 0;
-    const amount = Math.abs(balance);
+    const amount = parseInt(Math.abs(balance));
 
     const textSummary = expenses?.length
       ? expenses.every((expense) => expense.status === Status.PAID)

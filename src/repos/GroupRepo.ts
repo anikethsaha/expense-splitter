@@ -15,9 +15,13 @@ export class GroupRepo {
       const result = await this.db.find({
         selector: {
           user_ids: { $in: [userId] },
-          name: { $regex: searchString, $options: "i" },
         },
       });
+
+      // filter the results with substring match of group name as regex pattern in pouchdb pattern is not working
+      result.docs = result.docs.filter((group) =>
+        group.name.toLowerCase().includes(searchString.toLowerCase())
+      );
 
       return result.docs;
     } catch (error) {

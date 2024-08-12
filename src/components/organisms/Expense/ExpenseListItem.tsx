@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FiEdit2 } from "react-icons/fi";
 
@@ -58,13 +59,36 @@ const MONTH_MAP = {
 export const ExpenseListItem: React.FC<{
   expense: Expense;
   loggedInUserId: string;
-  friendName: string;
+  friendName?: string;
   split: Split;
-}> = ({ expense, friendName, loggedInUserId, split }) => {
+  group?: boolean;
+  noEdit?: boolean;
+}> = ({
+  expense,
+  friendName,
+  noEdit,
+  loggedInUserId,
+  group = false,
+  split,
+}) => {
+  const router = useRouter();
   const { brand } = useTheme();
-  const borrower = expense.borrower_id === loggedInUserId ? "You" : friendName;
-  const lender = expense.lender_id === loggedInUserId ? "You" : friendName;
+  const borrower =
+    expense.borrower_id === loggedInUserId ? (group ? "" : "You") : friendName;
+  const lender =
+    expense.lender_id === loggedInUserId ? (group ? "" : "You") : friendName;
   const splitCreatedOn = new Date(expense.created_at);
+
+  const text =
+    friendName || group
+      ? ` {lender} lend {borrower} ₹{split.amount}`
+      : expense.borrower_id === loggedInUserId
+      ? `You borrowed ₹{split.amount}`
+      : `You lent ₹{split.amount}`;
+
+  const edit = () => {
+    router.push(`/edit/split/${split.id}`);
+  };
 
   return (
     <Container>
@@ -78,17 +102,18 @@ export const ExpenseListItem: React.FC<{
       </Left>
       <Right>
         <TitleSmall>{split.name}</TitleSmall>
-        <TextCaption>
-          {lender} lend {borrower} ₹{split.amount}
-        </TextCaption>
+        <TextCaption>{text}</TextCaption>
       </Right>
-      <div>
-        <FiEdit2
-          style={{ cursor: "pointer" }}
-          size={24}
-          color={brand.primary}
-        />
-      </div>
+      {!noEdit && (
+        <div>
+          <FiEdit2
+            style={{ cursor: "pointer" }}
+            size={20}
+            color={brand.primary}
+            onClick={edit}
+          />
+        </div>
+      )}
     </Container>
   );
 };

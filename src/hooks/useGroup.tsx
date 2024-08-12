@@ -6,11 +6,13 @@ import { GroupRepo } from "src/repos/GroupRepo";
 import { UserRepo } from "src/repos/UserRepo";
 import { useLoggedInUser } from "src/stores/User.store";
 import { SplitRepo } from "src/repos/SplitRepo";
+import { ExpenseRepo } from "src/repos/ExpenseRepo";
 
 const userRepo = new UserRepo();
 const groupRepo = new GroupRepo();
 const friendRepo = new FriendRepo();
 const splitRepo = new SplitRepo();
+const expenseRepo = new ExpenseRepo();
 
 export const useGroup = (
   defaultLoading = false,
@@ -26,11 +28,13 @@ export const useGroup = (
       const userIds: string[] = [];
       for (const user of users) {
         if (!user.id) {
+          console.log({ user });
           // If user ID is null, create a new user
           const createdUser = await userRepo.createOrUpdateUser(
             user.phone_number,
-            user.name
+            user.name ?? "From_Group_" + name
           );
+          user.name = createdUser.name;
           userIds.push(createdUser.id);
         } else {
           // If user ID exists, use it directly
@@ -84,6 +88,36 @@ export const useGroup = (
     }
   };
 
+  const getAllExpenseByGroupId = async (groupId: string) => {
+    setLoading(true);
+    try {
+      const splits = await splitRepo.getAllSplitsByGroupId(groupId);
+
+      const expensesPromises = splits.map(
+        async (split) => await expenseRepo.getAllExpensesByIds(split.expenses)
+      );
+
+      const expenses = await Promise.all(expensesPromises);
+      return expenses.flat();
+    } catch (err) {
+      onError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getGroupMemberInfo = async (userId: string[]) => {
+    setLoading(true);
+    try {
+      const users = await userRepo.getAllUsersByIds(userId);
+      return users;
+    } catch (err) {
+      onError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getGroupInfo = async (groupId: string) => {
     setLoading(true);
     try {
@@ -114,5 +148,7 @@ export const useGroup = (
     getGroupList,
     getAllSplitsByGroupId,
     getGroupInfo,
+    getAllExpenseByGroupId,
+    getGroupMemberInfo,
   };
 };

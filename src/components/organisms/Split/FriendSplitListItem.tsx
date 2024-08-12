@@ -64,8 +64,8 @@ export const FriendSplitListItem: React.FC<{
         ? expenses.every((expense) => expense.status === Status.PAID)
           ? "All settled"
           : isLending
-          ? `You are lending ${amount}`
-          : `You owe ${amount}`
+          ? `You are lending ${parseInt(amount)}`
+          : `You owe ${parseInt(amount)}`
         : "No expenses",
     [expenses, isLending, amount]
   );

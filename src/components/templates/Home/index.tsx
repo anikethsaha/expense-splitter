@@ -20,6 +20,7 @@ import { useExpense } from "src/hooks/useExpense";
 import { Expense } from "src/models/Expense";
 import { ExpenseHelper } from "src/helpers/ExpenseHelper";
 import { useLoggedInUser } from "src/stores/User.store";
+import Activities from "../Activities";
 
 const Container = styled(BaseContainer)`
   gap: 4px;
@@ -75,6 +76,7 @@ export const HomeScreen = () => {
 
         {currTabId === "friends" && <FriendSplitList />}
         {currTabId === "groups" && <GroupList />}
+        {currTabId === "activities" && <Activities />}
         <FloatingButton
           trailingIcon={(props) => <FaRegSquarePlus {...props} />}
           text={"Add expense"}

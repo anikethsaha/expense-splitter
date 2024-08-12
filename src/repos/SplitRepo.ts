@@ -12,6 +12,14 @@ export class SplitRepo {
     this.expenseRepo = new ExpenseRepo();
   }
 
+  async getSplitById(splitId: string): Promise<Split | null> {
+    try {
+      return this.db.get(splitId);
+    } catch (error) {
+      throw new Error("Failed to get split by ID: " + error.message);
+    }
+  }
+
   getAllSplitsByGroupId(groupId: string): Promise<Split[]> {
     return this.db
       .find({
@@ -27,7 +35,7 @@ export class SplitRepo {
         if (existingSplit) {
           const expenseIds: string[] = [];
           for (const expense of split.expenses) {
-            const docId = await this.expenseRepo.createExpense(expense);
+            const docId = await this.expenseRepo.createOrUpdateExpense(expense);
             expenseIds.push(docId);
           }
 
@@ -39,11 +47,13 @@ export class SplitRepo {
             ...split,
             expenses: expenseIds,
           };
-          const response = await this.db.put({
+
+          const response = await this.db.putIfNotExists(split.id, {
             ...newSplit,
             _id: split.id,
             _rev: existingSplit._rev,
           });
+
           console.log("Split updated :", response);
           for (const id of expensesIdsToDelete) {
             await this.expenseRepo.addDeleteStatusExpense(id);
@@ -51,12 +61,11 @@ export class SplitRepo {
           return split.id;
         }
       }
-      // check if already exists
 
       // Create expenses first
       const expenseIds: string[] = [];
       for (const expense of split.expenses) {
-        const docId = await this.expenseRepo.createExpense(expense);
+        const docId = await this.expenseRepo.createOrUpdateExpense(expense);
         expenseIds.push(docId);
       }
 
@@ -72,6 +81,35 @@ export class SplitRepo {
       // Save split to the database
       const response = await this.db.put({ ...newSplit, _id: id });
       console.log("Split created :", response);
+      return id;
+    } catch (error) {
+      throw new Error("Failed to create or update the split: " + error.message);
+    }
+  }
+
+  async createOrUpdateSplitRaw(split: Split) {
+    try {
+      if (split.id) {
+        const existingSplit = await this.db.get(split.id);
+        if (existingSplit) {
+          await this.db.putIfNotExists(split.id, {
+            ...split,
+            _id: split.id,
+            _rev: existingSplit._rev,
+            updated_at: new Date().toISOString(),
+          });
+
+          return split.id;
+        }
+      }
+
+      const id = uuidv4();
+      const response = await this.db.put({
+        ...split,
+        id,
+        _id: id,
+      });
+
       return id;
     } catch (error) {
       throw new Error("Failed to create or update the split: " + error.message);

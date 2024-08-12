@@ -151,14 +151,14 @@ export const ExpensePlayerInput: React.FC<{
               showCheckbox
               isLast={i === userOptions.length - 1}
               user={option}
-              key={option.id}
+              key={`${option.id}-${option.phone_number}`}
               onSelect={() => handleUserSelect(option!)}
               onDeSelected={() => handleUserDeSelect(option)}
               preSelected={
                 preselectSelectedUsers?.find(
                   (user) =>
-                    user.id === option.id ||
-                    user.phone_number === option.phone_number
+                    user.phone_number === option.phone_number ||
+                    (typeof option.id !== "undefined" && user.id === option.id)
                 )
                   ? true
                   : false

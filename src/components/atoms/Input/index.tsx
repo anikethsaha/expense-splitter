@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { debounce } from "src/utils/debounce";
 import styled, { useTheme } from "styled-components";
 import {
@@ -69,7 +69,7 @@ const RightContainer = styled.div<{ size?: InputProps["size"] }>`
   align-items: center;
   position: absolute;
   right: 12px;
-  bottom: ${(props) => (props.size ? 12 : 14)}px;
+  bottom: ${(props) => (props.size === "small" ? 6 : 14)}px;
 `;
 
 export const Input: React.FC<InputProps> = ({
@@ -85,6 +85,16 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   const { base } = useTheme();
   const [value, setValue] = useState(defaultValue);
+  const defaultValueUsedRef = React.useRef(false);
+
+  useEffect(() => {
+    if (!defaultValueUsedRef.current) {
+      if (defaultValue) {
+        setValue(defaultValue);
+        defaultValueUsedRef.current = true;
+      }
+    }
+  }, [defaultValue]);
 
   const handleBlur = () => {
     if (onChange) {

@@ -8,11 +8,23 @@ export class ExpenseRepo {
   }
 
   // Create a new expense
-  async createExpense(expense: Expense) {
+  async createOrUpdateExpense(expense: Expense) {
     try {
-      const id = uuidv4();
+      if (expense.id) {
+        const existingExpense = await this.db.get(expense.id);
+        if (existingExpense) {
+          const response = await this.db.put({
+            ...expense,
+            _id: expense.id,
+            _rev: existingExpense._rev,
+            updated_at: new Date().toISOString(),
+          });
 
-      //
+          return expense.id;
+        }
+      }
+
+      const id = uuidv4();
 
       const response = await this.db.put({
         ...expense,
@@ -25,6 +37,19 @@ export class ExpenseRepo {
       return id;
     } catch (error) {
       throw new Error("Failed to create the expense: " + error.message);
+    }
+  }
+
+  async getAllExpensesByIds(expenseIds: string[]): Promise<Expense[]> {
+    try {
+      const result = await this.db.find({
+        selector: { id: { $in: expenseIds } },
+      });
+
+      return result.docs;
+    } catch (error) {
+      console.error("Error fetching expenses by IDs:", error);
+      return [];
     }
   }
 
@@ -79,6 +104,15 @@ export class ExpenseRepo {
       throw new Error(
         "Failed to find expenses between users: " + error.message
       );
+    }
+  }
+
+  async getExpenseById(expenseId: string): Promise<Expense | null> {
+    try {
+      const response = await this.db.get(expenseId);
+      return response;
+    } catch (error) {
+      throw new Error("Failed to get expense by ID: " + error.message);
     }
   }
 }

@@ -15,6 +15,7 @@ export interface SplitCreatorState {
   splitType?: SplitType;
   splitName?: string;
   splitInfo: Split["split_info"];
+  id?: string;
 }
 
 // Define the initial state using that type
@@ -33,6 +34,10 @@ export const splitCreatorSlice = createSlice({
   name: "splitCreator",
   initialState,
   reducers: {
+    fill(state, action: PayloadAction<SplitCreatorState>) {
+      state = { ...action.payload };
+      return state;
+    },
     // this is grouped as this is either or ops mostly
     feedStepOneData: (
       state,
@@ -73,18 +78,18 @@ export const splitCreatorSlice = createSlice({
 
     updateMemberPercentage: (
       state,
-      action: PayloadAction<{ userId: string; percentage: number }>
+      action: PayloadAction<{ phone_number: string; percentage: number }>
     ) => {
       state.splitInfo[state.splitType].memberAmount[
-        action.payload.userId
+        action.payload.phone_number
       ].percentage = action.payload.percentage;
     },
     updateMemberAbsolute: (
       state,
-      action: PayloadAction<{ userId: string; amount: number }>
+      action: PayloadAction<{ phone_number: string; amount: number }>
     ) => {
       state.splitInfo[state.splitType].memberAmount[
-        action.payload.userId
+        action.payload.phone_number
       ].amount = action.payload.amount;
     },
 

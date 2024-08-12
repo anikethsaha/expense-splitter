@@ -59,12 +59,11 @@ export const useSplit = (
 
           if (phoneNumberMatchedUsers.length > 0) {
             users = [...users, ...phoneNumberMatchedUsers];
-          } else {
-            if (phoneNumberRegex.test(str)) {
-              users = [...users, { phone_number: str }];
-            }
           }
         }
+      }
+      if (phoneNumberRegex.test(str)) {
+        users = [...users, { phone_number: str }];
       }
 
       // get groups by name
@@ -73,6 +72,7 @@ export const useSplit = (
         currentUser.id
       );
 
+      console.log({ allMyGroups });
       if (allMyGroups?.length > 0) {
         groups = [...groups, ...allMyGroups];
       }

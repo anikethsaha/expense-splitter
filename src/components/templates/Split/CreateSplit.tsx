@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "src/components/organisms/Navbar";
@@ -13,6 +13,7 @@ import { ThirdStepSplitCreator } from "./components/Steps/Third";
 import { CustomLayout } from "src/components/organisms/Layout";
 import { Provider } from "react-redux";
 import { store } from "src/stores/redux.store";
+import { FullSectionShimmer } from "src/components/atoms/Shimmer/FullScreen";
 
 const Container = styled.div`
   display: flex;
@@ -49,7 +50,12 @@ const RightElement = styled.div`
   flex: 1;
 `;
 
-export const CreateSplit = () => {
+type Props = {
+  id?: string;
+};
+
+export const CreateSplit: React.FC<Props> = ({ id }) => {
+  const [loading, setLoading] = React.useState(!!id);
   const errorCb = useCallback((err: string) => {
     toast.error(err);
   }, []);
@@ -61,6 +67,7 @@ export const CreateSplit = () => {
     paidBy,
     amount,
     validateAndCreateSplit,
+    fillStoreForEditSplit,
   } = useSplitCreatorHelper(errorCb);
   const router = useRouter();
 
@@ -73,7 +80,7 @@ export const CreateSplit = () => {
     if (unFinishedStep === 3) {
       validateAndCreateSplit().then((res) => {
         if (res) {
-          toast.success("Expense created successfully");
+          toast.success(`Expense ${id ? "updated" : "created"} successfully`);
           setTimeout(() => {
             router.replace("/");
           }, 200);
@@ -84,20 +91,37 @@ export const CreateSplit = () => {
     goNext(unFinishedStep);
   };
 
+  useEffect(() => {
+    if (id) {
+      fillStoreForEditSplit(id).then(() => {
+        setLoading(false);
+      });
+    }
+  }, [id]);
+
+  const buttonText =
+    unFinishedStep === 3 ? (id ? "Update Expenes" : "Create Expense") : "Next";
+
   return (
     <Container>
       <Navbar progress={unFinishedStep * 33} hideActions onBack={onBack} />
-      <Body>
-        {unFinishedStep === 1 && <FirstStepSplitCreator />}
 
-        {unFinishedStep === 2 && <SecondStepSplitCreator />}
-        {unFinishedStep === 3 && <ThirdStepSplitCreator />}
-      </Body>
+      {loading ? (
+        <FullSectionShimmer />
+      ) : (
+        <Body>
+          {unFinishedStep === 1 && <FirstStepSplitCreator />}
+
+          {unFinishedStep === 2 && <SecondStepSplitCreator />}
+          {unFinishedStep === 3 && <ThirdStepSplitCreator />}
+        </Body>
+      )}
 
       <Footer>
         <Button
+          disabled={loading}
           onClick={onNext}
-          text={unFinishedStep === 3 ? "Create Expense" : "Next"}
+          text={buttonText}
           rightText={
             unFinishedStep === 1 ? `${totalMembers} members` : undefined
           }
@@ -123,7 +147,7 @@ export const CreateSplit = () => {
                       <strong
                         style={{ fontWeight: 800, color: brand.alternative }}
                       >
-                        {amount}
+                        ₹{amount}
                       </strong>
                     </TextCaption>
                   </>
@@ -138,11 +162,11 @@ export const CreateSplit = () => {
   );
 };
 
-export const CreateSplitScreen = () => {
+export const CreateSplitScreen: React.FC<Props> = (props) => {
   return (
     <CustomLayout>
       <Provider store={store}>
-        <CreateSplit />
+        <CreateSplit {...props} />
       </Provider>
     </CustomLayout>
   );

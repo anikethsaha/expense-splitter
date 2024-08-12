@@ -62,8 +62,8 @@ export const SecondStepSplitCreator = () => {
     toast.error(err);
   }, []);
   const dispatcher = useDispatch();
-  const { getMemberList } = useSplitCreatorHelper(errorCb);
-  const [splitType, setSplitType] = React.useState(SplitType.EQUAL);
+  const { getMemberList, paidBy, splitName, amount } =
+    useSplitCreatorHelper(errorCb);
   const [members, setMembers] = React.useState<User[]>([]);
 
   useEffect(() => {
@@ -76,6 +76,7 @@ export const SecondStepSplitCreator = () => {
     dispatcher(splitCreatorSlice.actions.updatePaidBy({ ...user }));
   };
 
+  console.log({ splitName, members });
   return (
     <Container>
       <BaseScreenPadding
@@ -100,6 +101,7 @@ export const SecondStepSplitCreator = () => {
           }
           label="Expense Name"
           type={"text"}
+          defaultValue={splitName}
         />
         <Input
           size={"small"}
@@ -108,6 +110,7 @@ export const SecondStepSplitCreator = () => {
           }
           label="Amount"
           type={"number"}
+          defaultValue={amount?.toString()}
         />
 
         <TitleSmall
@@ -119,7 +122,11 @@ export const SecondStepSplitCreator = () => {
         </TitleSmall>
       </BaseScreenPadding>
 
-      <UserRadioList users={members} onChange={handlePaidBySelection} />
+      <UserRadioList
+        users={members}
+        preSelected={paidBy?.id}
+        onChange={handlePaidBySelection}
+      />
 
       {/* <AmountSplitWrapper>
         <Tabs

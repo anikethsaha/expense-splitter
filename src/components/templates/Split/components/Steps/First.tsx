@@ -62,20 +62,23 @@ export const FirstStepSplitCreator = () => {
           </>
         )}
 
-        {typeof selectedUsers !== "undefined" && selectedUsers.length > 0 && (
-          <BaseScreenPadding>
-            <TextCaption>Selected Users</TextCaption>
-          </BaseScreenPadding>
-        )}
-        {selectedUsers?.map((user, index) => (
-          <UserListItem
-            key={user.id ?? index}
-            user={user}
-            isLast={index === selectedUsers.length - 1}
-            onSelect={() => {}}
-            onDeleted={() => handleUserSelect(user, false)}
-          />
-        ))}
+        {typeof selectedUsers !== "undefined" &&
+          selectedUsers.length > 0 &&
+          !selectedGroup && (
+            <BaseScreenPadding>
+              <TextCaption>Selected Users</TextCaption>
+            </BaseScreenPadding>
+          )}
+        {!selectedGroup &&
+          selectedUsers?.map((user, index) => (
+            <UserListItem
+              key={user.id ?? index}
+              user={user}
+              isLast={index === selectedUsers.length - 1}
+              onSelect={() => {}}
+              onDeleted={() => handleUserSelect(user, false)}
+            />
+          ))}
       </div>
     </>
   );

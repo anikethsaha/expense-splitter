@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Group } from "src/models/Group";
-import { FrontendSplit, SplitType } from "src/models/Split";
+import { FrontendSplit, Split, SplitType } from "src/models/Split";
 import { User } from "src/models/user";
 import { UserRepo } from "src/repos/UserRepo";
 import {
@@ -43,12 +43,21 @@ export const useSplitCreatorHelper = (onError?: (err: string) => void) => {
     if (splitCreatorState?.segmentType === "group") {
       const group = splitCreatorState?.group;
       if (group) {
-        const groupMembers = await userRepo.getAllUsersByIds(group.user_ids);
+        let groupMembers = await userRepo.getAllUsersByIds(group.user_ids);
+        groupMembers = groupMembers.filter(
+          (member) => member.id !== currentUser?.id
+        );
+
         return [{ ...currentUser, name: "You" }, ...groupMembers];
       }
     }
 
-    return [{ ...currentUser, name: "You" }, ...splitCreatorState?.users];
+    return [
+      { ...currentUser, name: "You" },
+      ...(splitCreatorState?.users?.filter(
+        (user) => user.id !== currentUser?.id
+      ) ?? []),
+    ];
   }, [JSON.stringify(splitCreatorState), currentUser?.id]);
 
   const setGroup = (group: Group | null) => {
@@ -112,6 +121,11 @@ export const useSplitCreatorHelper = (onError?: (err: string) => void) => {
     );
   };
 
+  /**
+   * this validates
+   * and creates a split or updates an existing split
+   * @returns
+   */
   const validateAndCreateSplit = async () => {
     const error = splitHelper.validateSplit({ ...splitCreatorState });
     if (error) {
@@ -121,6 +135,16 @@ export const useSplitCreatorHelper = (onError?: (err: string) => void) => {
     }
 
     try {
+      if (splitCreatorState.id) {
+        // update split
+        const id = await splitHelper.runSplitEditor(
+          { ...currentUser! },
+          { ...splitCreatorState }
+        );
+
+        return id;
+      }
+
       const payload = await splitHelper.preparePayload(
         { ...currentUser! },
         { ...splitCreatorState }
@@ -135,6 +159,24 @@ export const useSplitCreatorHelper = (onError?: (err: string) => void) => {
       console.error("Error creating split:", error);
       onError?.("Error creating split");
       return;
+    }
+  };
+
+  const fillStoreForEditSplit = async (id: string) => {
+    const split = await splitRepo.getSplitById(id);
+
+    if (split) {
+      try {
+        const splitCreatorState = await splitHelper.getStateFromSplit(split);
+
+        dispatcher(splitCreatorSlice.actions.fill(splitCreatorState));
+        setUnFinishedStep(1);
+      } catch (error) {
+        console.log(error);
+        onError?.("Error getting split data");
+      }
+    } else {
+      onError?.("Split not found");
     }
   };
 
@@ -156,5 +198,8 @@ export const useSplitCreatorHelper = (onError?: (err: string) => void) => {
     splitType: splitCreatorState?.splitType,
     splitInfo: splitCreatorState?.splitInfo,
     validateAndCreateSplit,
+    fillStoreForEditSplit,
+    splitName: splitCreatorState?.splitName,
+    id: splitCreatorState?.id,
   };
 };

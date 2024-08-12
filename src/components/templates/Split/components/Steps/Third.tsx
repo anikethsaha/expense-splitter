@@ -117,19 +117,19 @@ export const ThirdStepSplitCreator = () => {
     });
   }, []);
 
-  const handlePercentageChange = (userId: string, value: number) => {
+  const handlePercentageChange = (phone_number: string, value: number) => {
     dispatcher(
       splitCreatorSlice.actions.updateMemberPercentage({
-        userId,
+        phone_number,
         percentage: value,
       })
     );
   };
 
-  const handleAbsoluteChange = (userId: string, value: number) => {
+  const handleAbsoluteChange = (phone_number: string, value: number) => {
     dispatcher(
       splitCreatorSlice.actions.updateMemberAbsolute({
-        userId,
+        phone_number,
         amount: value,
       })
     );
@@ -174,9 +174,10 @@ export const ThirdStepSplitCreator = () => {
                     disabled: true,
                     onChange: (e) => {},
 
-                    defaultValue:
-                      splitInfo[splitType]?.memberAmount[member.id]?.amount ??
-                      0,
+                    defaultValue: parseInt(
+                      splitInfo[splitType]?.memberAmount[member.phone_number]
+                        ?.amount ?? 0
+                    ),
                   }}
                 />
               ))}
@@ -191,11 +192,11 @@ export const ThirdStepSplitCreator = () => {
                   isLast
                   rightInputProps={{
                     onChange: (val) => {
-                      handlePercentageChange(member.id, val);
+                      handlePercentageChange(member.phone_number, val);
                     },
                     rightElement: <FaPercentage size={10} />,
                     defaultValue:
-                      splitInfo[splitType]?.memberAmount[member.id]
+                      splitInfo[splitType]?.memberAmount[member.phone_number]
                         ?.percentage ?? 0,
                   }}
                 />
@@ -211,12 +212,13 @@ export const ThirdStepSplitCreator = () => {
                   isLast
                   rightInputProps={{
                     onChange: (val) => {
-                      handleAbsoluteChange(member.id, val);
+                      handleAbsoluteChange(member.phone_number, val);
                     },
 
-                    defaultValue:
-                      splitInfo[splitType]?.memberAmount[member.id]?.amount ??
-                      0,
+                    defaultValue: parseInt(
+                      splitInfo[splitType]?.memberAmount[member.phone_number]
+                        ?.amount ?? 0
+                    ),
                   }}
                 />
               ))}

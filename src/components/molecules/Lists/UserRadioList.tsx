@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { UserListItem } from "src/components/atoms/ListItems/UserListItem";
 import { User } from "src/models/user";
 import { styled } from "styled-components";
@@ -13,16 +13,26 @@ const Container = styled.div`
 export const UserRadioList: React.FC<{
   users: User[];
   onChange: (user: User) => void;
-}> = ({ users, onChange }) => {
+  preSelected?: string;
+}> = ({ users, onChange, preSelected }) => {
   const [selectedUser, setSelectedUser] = useState<User>(users[0]);
+  const defaultStoredFlag = useRef(null);
 
   useEffect(() => {
     onChange(selectedUser);
   }, [selectedUser]);
 
   useEffect(() => {
-    setSelectedUser(users[0]);
-  }, [users]);
+    if (preSelected && users && !defaultStoredFlag.current) {
+      const preSelectedUser = users.find((user) => user.id === preSelected);
+      if (preSelectedUser) {
+        console.log({ preSelectedUser });
+        setSelectedUser({ ...preSelectedUser });
+        defaultStoredFlag.current = preSelectedUser;
+        return;
+      }
+    }
+  }, [users, preSelected]);
 
   return (
     <Container>
