@@ -10,6 +10,9 @@ import Button from "src/components/atoms/Buttons";
 import { SecondStepSplitCreator } from "./components/Steps/Second";
 import { TextCaption } from "src/components/atoms/Typography/Typography";
 import { ThirdStepSplitCreator } from "./components/Steps/Third";
+import { CustomLayout } from "src/components/organisms/Layout";
+import { Provider } from "react-redux";
+import { store } from "src/stores/redux.store";
 
 const Container = styled.div`
   display: flex;
@@ -132,5 +135,15 @@ export const CreateSplit = () => {
         />
       </Footer>
     </Container>
+  );
+};
+
+export const CreateSplitScreen = () => {
+  return (
+    <CustomLayout>
+      <Provider store={store}>
+        <CreateSplit />
+      </Provider>
+    </CustomLayout>
   );
 };

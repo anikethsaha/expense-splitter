@@ -1,21 +1,19 @@
 "use client";
 
 import React from "react";
-import { AppContainer } from "src/components/organisms/Layout/AppContainer";
-import { AuthLayer } from "src/components/organisms/Layout/AuthLayer";
-import { CreateSplit } from "src/components/templates/Split/CreateSplit";
-import { Provider } from "react-redux";
-import { store } from "src/stores/redux.store";
+import dynamic from "next/dynamic";
+
+const CreateSplitScreen = dynamic(
+  () =>
+    import("src/components/templates/Split/CreateSplit").then(
+      (mod) => mod.CreateSplitScreen
+    ),
+  {
+    ssr: false,
+  }
+);
 
 export const CreateExpenseScreen = () => {
-  return (
-    <AppContainer>
-      <AuthLayer>
-        <Provider store={store}>
-          <CreateSplit />
-        </Provider>
-      </AuthLayer>
-    </AppContainer>
-  );
+  return <CreateSplitScreen />;
 };
 export default CreateExpenseScreen;

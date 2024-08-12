@@ -1,6 +1,5 @@
 import { DEFAULT_THEME } from "src/components/atoms/Typography/Typography";
 import styled, { ThemeProvider } from "styled-components";
-import { AuthLayer } from "./AuthLayer";
 
 const AppContainerStyle = styled.div`
   height: 100vh;

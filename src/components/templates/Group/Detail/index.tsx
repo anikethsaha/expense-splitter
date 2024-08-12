@@ -11,6 +11,7 @@ import {
   TitleMedium,
   TitleSmall,
 } from "src/components/atoms/Typography/Typography";
+import { CustomLayout } from "src/components/organisms/Layout";
 import { Navbar } from "src/components/organisms/Navbar";
 import { useGroup } from "src/hooks/useGroup";
 import { Group } from "src/models/Group";
@@ -92,34 +93,36 @@ export const GroupDetailScreen: React.FC<{ id: string }> = ({ id }) => {
   }, [JSON.stringify(groupInfo)]);
 
   return (
-    <Container>
-      <Navbar onBack={() => router.replace("/")} />
-      <Header>
-        {rootLoading ? (
+    <CustomLayout>
+      <Container>
+        <Navbar onBack={() => router.replace("/")} />
+        <Header>
+          {rootLoading ? (
+            <FullSectionShimmer />
+          ) : (
+            <>
+              <div className="left">
+                <TextSmall color={brand.primary}>{groupInfo?.name}</TextSmall>
+                <TitleSmall color={base.base2}>You owe 20,2</TitleSmall>
+              </div>
+              <div className="right">
+                <TitleMedium color={brand.primary}>
+                  {groupInfo?.user_ids?.length}
+                </TitleMedium>
+                <TextCaption color={brand.primary}>Members</TextCaption>
+              </div>
+            </>
+          )}
+        </Header>
+        {fetchingSplits ? (
           <FullSectionShimmer />
         ) : (
-          <>
-            <div className="left">
-              <TextSmall color={brand.primary}>{groupInfo?.name}</TextSmall>
-              <TitleSmall color={base.base2}>You owe 20,2</TitleSmall>
-            </div>
-            <div className="right">
-              <TitleMedium color={brand.primary}>
-                {groupInfo?.user_ids?.length}
-              </TitleMedium>
-              <TextCaption color={brand.primary}>Members</TextCaption>
-            </div>
-          </>
+          <BaseScreenPadding>
+            <TitleSmall>{splits.length === 0 ? "no expenses" : ""}</TitleSmall>
+          </BaseScreenPadding>
         )}
-      </Header>
-      {fetchingSplits ? (
-        <FullSectionShimmer />
-      ) : (
-        <BaseScreenPadding>
-          <TitleSmall>{splits.length === 0 ? "no expenses" : ""}</TitleSmall>
-        </BaseScreenPadding>
-      )}
-    </Container>
+      </Container>
+    </CustomLayout>
   );
 };
 

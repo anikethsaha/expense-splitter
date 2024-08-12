@@ -1,12 +1,15 @@
 "use client";
 
-import { AppContainer } from "src/components/organisms/Layout/AppContainer";
-import { LoginScreen } from "src/components/templates/Login";
+import dynamic from "next/dynamic";
+import React from "react";
+
+const LoginScreen = dynamic(
+  () => import("src/components/templates/Login").then((mod) => mod.LoginScreen),
+  {
+    ssr: false,
+  }
+);
 
 export default function Login() {
-  return (
-    <AppContainer>
-      <LoginScreen />
-    </AppContainer>
-  );
+  return <LoginScreen />;
 }

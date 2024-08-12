@@ -1,18 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import React from "react";
-import { AppContainer } from "src/components/organisms/Layout/AppContainer";
-import { AuthLayer } from "src/components/organisms/Layout/AuthLayer";
-import { CreateGroup } from "src/components/templates/Group/CreateScreen";
+
+const CreateGroup = dynamic(
+  () =>
+    import("src/components/templates/Group/CreateScreen").then(
+      (mod) => mod.CreateGroup
+    ),
+  {
+    ssr: false,
+  }
+);
 
 export const AddGroup = () => {
-  return (
-    <AppContainer>
-      <AuthLayer>
-        <CreateGroup />
-      </AuthLayer>
-    </AppContainer>
-  );
+  return <CreateGroup />;
 };
 
 export default AddGroup;

@@ -3,13 +3,11 @@ import toast, { Toaster } from "react-hot-toast";
 import React from "react";
 import Button from "src/components/atoms/Buttons";
 import { Input } from "src/components/atoms/Input";
-import {
-  TitleMedium,
-  TitleSmall,
-} from "src/components/atoms/Typography/Typography";
+import { TitleMedium } from "src/components/atoms/Typography/Typography";
 import { useAuth } from "src/hooks/useAuth";
 import { User } from "src/models/user";
 import styled from "styled-components";
+import { AppContainer } from "src/components/organisms/Layout/AppContainer";
 
 const Container = styled.div`
   display: flex;
@@ -50,17 +48,19 @@ export const LoginScreen = () => {
   };
 
   return (
-    <Container>
-      <LoginFormContainer>
-        <TitleMedium>Please Login</TitleMedium>{" "}
-        <Input
-          type="number"
-          maxLength={10}
-          onChange={(val) => setPhoneNumber(val)}
-        />
-        <Button text={"Login"} onClick={handleLogin} />
-      </LoginFormContainer>
-      <Toaster />
-    </Container>
+    <AppContainer>
+      <Container>
+        <LoginFormContainer>
+          <TitleMedium>Please Login</TitleMedium>{" "}
+          <Input
+            type="number"
+            maxLength={10}
+            onChange={(val) => setPhoneNumber(val)}
+          />
+          <Button text={"Login"} onClick={handleLogin} />
+        </LoginFormContainer>
+        <Toaster />
+      </Container>
+    </AppContainer>
   );
 };

@@ -1,18 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import React from "react";
-import { AppContainer } from "src/components/organisms/Layout/AppContainer";
-import { AuthLayer } from "src/components/organisms/Layout/AuthLayer";
-import { CreateFriendScreen } from "src/components/templates/Friend/CreateScreen";
+
+const CreateFriendScreen = dynamic(
+  () =>
+    import("src/components/templates/Friend/CreateScreen").then(
+      (mod) => mod.CreateFriendScreen
+    ),
+  {
+    ssr: false,
+  }
+);
 
 export const AddFriendPage = () => {
-  return (
-    <AppContainer>
-      <AuthLayer>
-        <CreateFriendScreen />
-      </AuthLayer>
-    </AppContainer>
-  );
+  return <CreateFriendScreen />;
 };
 
 export default AddFriendPage;

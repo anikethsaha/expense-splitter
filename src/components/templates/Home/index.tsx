@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { FaRegSquarePlus } from "react-icons/fa6";
-
 import { BaseScreenPadding } from "src/components/atoms/Common/Padding";
 import { TitleSmall } from "src/components/atoms/Typography/Typography";
 import { Tabs } from "src/components/molecules/Tab";
@@ -15,6 +14,7 @@ import { FriendSplitList } from "src/components/organisms/Friends/FriendSplitLis
 import { useRouter, useSearchParams } from "next/navigation";
 import { FloatingButton } from "src/components/molecules/FloatingButton";
 import { GroupList } from "src/components/organisms/Group/GroupList";
+import { CustomLayout } from "src/components/organisms/Layout";
 
 const Container = styled.div`
   display: flex;
@@ -51,22 +51,24 @@ export const HomeScreen = () => {
   };
 
   return (
-    <Container>
-      <Navbar onAddClick={onAddClick} />
-      <BaseScreenPadding>
-        <TitleSmall>Overall, you owe INR 20000</TitleSmall>
-      </BaseScreenPadding>
-      <BaseScreenPadding>
-        <Tabs onTabChange={onTabChange} list={TAB_DATA} />
-      </BaseScreenPadding>
+    <CustomLayout>
+      <Container>
+        <Navbar onAddClick={onAddClick} />
+        <BaseScreenPadding>
+          <TitleSmall>Overall, you owe INR 20000</TitleSmall>
+        </BaseScreenPadding>
+        <BaseScreenPadding>
+          <Tabs onTabChange={onTabChange} list={TAB_DATA} />
+        </BaseScreenPadding>
 
-      {currTabId === "friends" && <FriendSplitList />}
-      {currTabId === "groups" && <GroupList />}
-      <FloatingButton
-        trailingIcon={(props) => <FaRegSquarePlus {...props} />}
-        text={"Add expense"}
-        onClick={onAddExpenseClick}
-      />
-    </Container>
+        {currTabId === "friends" && <FriendSplitList />}
+        {currTabId === "groups" && <GroupList />}
+        <FloatingButton
+          trailingIcon={(props) => <FaRegSquarePlus {...props} />}
+          text={"Add expense"}
+          onClick={onAddExpenseClick}
+        />
+      </Container>
+    </CustomLayout>
   );
 };
