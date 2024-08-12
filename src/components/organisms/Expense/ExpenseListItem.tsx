@@ -1,4 +1,6 @@
 import React from "react";
+import { FiEdit2 } from "react-icons/fi";
+
 import {
   TextCaption,
   TitleMedium,
@@ -13,6 +15,7 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: start;
   align-items: center;
+  box-sizing: border-box;
   width: 100%;
   gap: 12px;
 `;
@@ -79,6 +82,13 @@ export const ExpenseListItem: React.FC<{
           {lender} lend {borrower} ₹{split.amount}
         </TextCaption>
       </Right>
+      <div>
+        <FiEdit2
+          style={{ cursor: "pointer" }}
+          size={24}
+          color={brand.primary}
+        />
+      </div>
     </Container>
   );
 };

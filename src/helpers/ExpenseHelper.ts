@@ -2,7 +2,10 @@ import { Expense, Status } from "src/models/Expense";
 import { User } from "src/models/user";
 
 export class ExpenseHelper {
-  static calculateMyStatus(currentUser: User, expenses: Expense[]) {
+  static calculateMyStatus(currentUser: User | null, expenses: Expense[]) {
+    if (!currentUser)
+      return { isLending: false, amount: 0, textSummary: "No expenses" };
+
     let totalLent = 0;
     let totalOwed = 0;
     const openExpenses = expenses.filter(
@@ -27,8 +30,8 @@ export class ExpenseHelper {
       ? expenses.every((expense) => expense.status === Status.PAID)
         ? "All settled"
         : isLending
-        ? `You are lending ${amount}`
-        : `You owe ${amount}`
+        ? `You are lending ₹${amount}`
+        : `You owe ₹${amount}`
       : "No expenses";
 
     return {

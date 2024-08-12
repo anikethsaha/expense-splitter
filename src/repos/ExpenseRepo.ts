@@ -42,6 +42,21 @@ export class ExpenseRepo {
     }
   }
 
+  // Find all expenses by user ID
+  async findExpensesByUserId(userId: string): Promise<Expense[]> {
+    try {
+      const result = await expenseDbInstance.find({
+        selector: {
+          $or: [{ borrower_id: userId }, { lender_id: userId }],
+        },
+      });
+
+      return result.docs as Expense[];
+    } catch (error) {
+      throw new Error("Failed to find expenses by user ID: " + error.message);
+    }
+  }
+
   // Find all expenses between two user IDs
   async findExpensesBetweenUsers(
     userId1: string,

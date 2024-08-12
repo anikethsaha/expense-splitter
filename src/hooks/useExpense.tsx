@@ -52,6 +52,12 @@ export const useExpense = (
     [currentUser]
   );
 
+  const getAllMyExpenses = useCallback(async () => {
+    if (!currentUser?.id) return;
+    const expenses = await expenseRepo.findExpensesByUserId(currentUser?.id);
+    return expenses;
+  }, [currentUser]);
+
   const getSplitsForExpenses = useCallback(async (expenses: Expense[]) => {
     const promises = expenses.map((expense) =>
       splitRepo.getSplitByExpenseId(expense.id)
@@ -65,5 +71,6 @@ export const useExpense = (
     calculateOwingOrLending,
     getSplitsForExpenses,
     loading,
+    getAllMyExpenses,
   };
 };

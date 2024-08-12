@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import { BaseScreenPadding } from "src/components/atoms/Common/Padding";
 import { TitleSmall } from "src/components/atoms/Typography/Typography";
@@ -16,6 +16,10 @@ import { FloatingButton } from "src/components/molecules/FloatingButton";
 import { GroupList } from "src/components/organisms/Group/GroupList";
 import { CustomLayout } from "src/components/organisms/Layout";
 import { BaseContainer } from "src/components/atoms/Common/StyledContainer";
+import { useExpense } from "src/hooks/useExpense";
+import { Expense } from "src/models/Expense";
+import { ExpenseHelper } from "src/helpers/ExpenseHelper";
+import { useLoggedInUser } from "src/stores/User.store";
 
 const Container = styled(BaseContainer)`
   gap: 4px;
@@ -29,6 +33,9 @@ const TAB_DATA = [
 
 export const HomeScreen = () => {
   const router = useRouter();
+  const { getAllMyExpenses } = useExpense();
+  const currentUser = useLoggedInUser();
+  const [myExpenses, setMyExpenses] = React.useState<Expense[]>([]);
   const [currTabId, setCurrTabId] = React.useState(TAB_DATA[0].id);
 
   const onAddClick = useCallback(() => {
@@ -47,12 +54,20 @@ export const HomeScreen = () => {
     router.push("/add/expense");
   };
 
+  useEffect(() => {
+    getAllMyExpenses().then((data) => {
+      if (data) setMyExpenses([...data]);
+    });
+  }, [currentUser?.id]);
+
+  const myStatus = ExpenseHelper.calculateMyStatus(currentUser, myExpenses);
+
   return (
     <CustomLayout>
       <Container>
         <Navbar onAddClick={onAddClick} />
         <BaseScreenPadding>
-          <TitleSmall>Overall, you owe INR 20000</TitleSmall>
+          <TitleSmall>{myStatus.textSummary}</TitleSmall>
         </BaseScreenPadding>
         <BaseScreenPadding>
           <Tabs onTabChange={onTabChange} list={TAB_DATA} />

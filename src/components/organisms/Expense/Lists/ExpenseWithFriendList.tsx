@@ -19,6 +19,7 @@ const Container = styled.div`
   align-items: start;
   justify-content: center;
   padding: 12px 16px;
+  box-sizing: border-box;
   gap: 8px;
   width: 100%;
 
