@@ -2,10 +2,13 @@ import "styled-components";
 import styled from "styled-components";
 
 export const LIGHT_THEME = {
+  theme: "light",
   brand: {
     primary: "#000000",
     secondary: "#F9EFE5",
     alternative: "#FFFFFF",
+    background: "white",
+    brandOpposite: "#FFFFFF",
   },
   state: {
     error: "#FF0000",
@@ -24,6 +27,35 @@ export const LIGHT_THEME = {
   },
   stroke: {
     light: "#e1e0e0",
+  },
+};
+
+export const DARK_THEME = {
+  theme: "dark",
+  brand: {
+    primary: "#FFFFFF", // White or off-white for text
+    secondary: "#2C2C2C", // Dark gray for backgrounds
+    alternative: "#1A1A1A", // Even darker for alternative elements
+    background: "black",
+    brandOpposite: "#000000",
+  },
+  state: {
+    error: "#FF6B6B", // Slightly softer red for error states
+    success: "#4CAF50", // Bright green for success states
+  },
+  gray: {
+    medium: "#908e8e", // Medium gray for elements
+    light: "#383838", // Light gray, but still dark enough for a dark theme
+  },
+  base: {
+    base1: "#b1b1b1", // Light gray for text or icons
+    base2: "#B0B3C1", // Slightly darker for contrast
+    base3: "#2A2A2A", // Dark background for the main area
+    baseDarker1: "#a1a1a1", // Very dark, almost black
+    baseLighter1: "#5A5A5A", // Slightly lighter for borders or highlights
+  },
+  stroke: {
+    light: "#3A3A3A", // Light but still in the dark spectrum
   },
 };
 

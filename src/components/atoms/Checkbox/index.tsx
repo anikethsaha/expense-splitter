@@ -1,11 +1,13 @@
 import React from "react";
 import { BiCheckbox } from "react-icons/bi";
 import { BiCheckboxChecked } from "react-icons/bi";
+import { useTheme } from "styled-components";
 
 export const Checkbox: React.FC<{
   val: boolean;
   onChange: (val: boolean) => void;
 }> = ({ val = false, onChange }) => {
+  const { brand } = useTheme();
   return (
     <div
       style={{
@@ -16,9 +18,17 @@ export const Checkbox: React.FC<{
       }}
     >
       {!val ? (
-        <BiCheckbox size={24} onClick={() => onChange(true)} />
+        <BiCheckbox
+          color={brand.primary}
+          size={24}
+          onClick={() => onChange(true)}
+        />
       ) : (
-        <BiCheckboxChecked size={24} onClick={() => onChange(false)} />
+        <BiCheckboxChecked
+          color={brand.primary}
+          size={24}
+          onClick={() => onChange(false)}
+        />
       )}
     </div>
   );

@@ -53,7 +53,11 @@ const Header = styled(BaseScreenPadding)`
   }
 `;
 
-export const GroupDetailScreen: React.FC<{ id: string }> = ({ id }) => {
+type GroupDetailScreenProps = { id: string };
+
+const GroupDetailScreenComponent: React.FC<GroupDetailScreenProps> = ({
+  id,
+}) => {
   const router = useRouter();
   const { brand, base } = useTheme();
   const errorCb = useCallback((err?: string) => {
@@ -93,35 +97,41 @@ export const GroupDetailScreen: React.FC<{ id: string }> = ({ id }) => {
   }, [JSON.stringify(groupInfo)]);
 
   return (
-    <CustomLayout>
-      <Container>
-        <Navbar onBack={() => router.replace("/")} />
-        <Header>
-          {rootLoading ? (
-            <FullSectionShimmer />
-          ) : (
-            <>
-              <div className="left">
-                <TextSmall color={brand.primary}>{groupInfo?.name}</TextSmall>
-                <TitleSmall color={base.base2}>You owe 20,2</TitleSmall>
-              </div>
-              <div className="right">
-                <TitleMedium color={brand.primary}>
-                  {groupInfo?.user_ids?.length}
-                </TitleMedium>
-                <TextCaption color={brand.primary}>Members</TextCaption>
-              </div>
-            </>
-          )}
-        </Header>
-        {fetchingSplits ? (
+    <Container>
+      <Navbar onBack={() => router.replace("/")} />
+      <Header>
+        {rootLoading ? (
           <FullSectionShimmer />
         ) : (
-          <BaseScreenPadding>
-            <TitleSmall>{splits.length === 0 ? "no expenses" : ""}</TitleSmall>
-          </BaseScreenPadding>
+          <>
+            <div className="left">
+              <TextSmall color={brand.primary}>{groupInfo?.name}</TextSmall>
+              <TitleSmall color={base.base2}>You owe 20,2</TitleSmall>
+            </div>
+            <div className="right">
+              <TitleMedium color={brand.primary}>
+                {groupInfo?.user_ids?.length}
+              </TitleMedium>
+              <TextCaption color={brand.primary}>Members</TextCaption>
+            </div>
+          </>
         )}
-      </Container>
+      </Header>
+      {fetchingSplits ? (
+        <FullSectionShimmer />
+      ) : (
+        <BaseScreenPadding>
+          <TitleSmall>{splits.length === 0 ? "no expenses" : ""}</TitleSmall>
+        </BaseScreenPadding>
+      )}
+    </Container>
+  );
+};
+
+export const GroupDetailScreen: React.FC<GroupDetailScreenProps> = (props) => {
+  return (
+    <CustomLayout>
+      <GroupDetailScreenComponent {...props} />
     </CustomLayout>
   );
 };

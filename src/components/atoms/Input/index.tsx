@@ -42,6 +42,8 @@ const InputContainer = styled.input<{
   text-transform: ${typographyStyles.titleMedium.textTransform};
   color: ${(props) => props.color || props.theme.base.base1};
   letter-spacing: 0.15px;
+  background-color: ${(props) =>
+    props.theme.theme === "dark" ? "transparent" : props.theme.base.base};
 
   &:hover {
     border-color: ${(props) => props.theme.base.base2};
@@ -67,7 +69,7 @@ const RightContainer = styled.div<{ size?: InputProps["size"] }>`
   align-items: center;
   position: absolute;
   right: 12px;
-  bottom: ${(props) => (props.size ? 6 : 14)}px;
+  bottom: ${(props) => (props.size ? 12 : 14)}px;
 `;
 
 export const Input: React.FC<InputProps> = ({

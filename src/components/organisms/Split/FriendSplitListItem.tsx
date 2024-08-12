@@ -1,14 +1,17 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import {
   TextCaption,
   TitleSmall,
 } from "src/components/atoms/Typography/Typography";
+import { Sheet } from "react-modal-sheet";
 import { useExpense } from "src/hooks/useExpense";
 import { Expense, Status } from "src/models/Expense";
 import { Friend } from "src/models/Friend";
 import { Split } from "src/models/Split";
 import { useLoggedInUser } from "src/stores/User.store";
 import { styled, useTheme } from "styled-components";
+import { ExpenseWithFriendList } from "../Expense/Lists/ExpenseWithFriendList";
+import { BottomSheet } from "src/components/molecules/BottomSheet";
 
 const Container = styled.div`
   display: flex;
@@ -29,6 +32,7 @@ const TextWrapper = styled.div`
 export const FriendSplitListItem: React.FC<{
   friend: Friend;
 }> = ({ friend }) => {
+  const [showList, setShowList] = React.useState(false);
   const loggedInUser = useLoggedInUser();
   const [expenses, setExpenses] = React.useState<Expense[]>([]);
   const { base, brand } = useTheme();
@@ -67,11 +71,24 @@ export const FriendSplitListItem: React.FC<{
   );
 
   return (
-    <Container>
-      <TextWrapper>
-        <TitleSmall color={base.baseDarker1}>{friend.user_2_name}</TitleSmall>
-        <TextCaption>{secondaryText}</TextCaption>
-      </TextWrapper>
-    </Container>
+    <>
+      <Container onClick={() => setShowList((prev) => !prev)}>
+        <TextWrapper>
+          <TitleSmall color={base.baseDarker1}>{friend.user_2_name}</TitleSmall>
+          <TextCaption>{secondaryText}</TextCaption>
+        </TextWrapper>
+      </Container>
+      <BottomSheet
+        snapPoints={[800]}
+        isOpen={showList}
+        onClose={() => setShowList(false)}
+      >
+        <ExpenseWithFriendList
+          text={secondaryText}
+          expenses={expenses}
+          friend={friend}
+        />
+      </BottomSheet>
+    </>
   );
 };

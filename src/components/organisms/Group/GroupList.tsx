@@ -42,7 +42,7 @@ export const GroupList = () => {
           key={group.id}
           group={group}
           onClick={() => {
-            router.push(`/groups/${group.id}`);
+            router.replace(`/groups/${group.id}`);
           }}
         />
       ))}

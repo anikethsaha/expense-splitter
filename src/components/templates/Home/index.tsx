@@ -15,12 +15,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FloatingButton } from "src/components/molecules/FloatingButton";
 import { GroupList } from "src/components/organisms/Group/GroupList";
 import { CustomLayout } from "src/components/organisms/Layout";
+import { BaseContainer } from "src/components/atoms/Common/StyledContainer";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
+const Container = styled(BaseContainer)`
   gap: 4px;
 `;
 

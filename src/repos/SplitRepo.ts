@@ -77,4 +77,21 @@ export class SplitRepo {
       throw new Error("Failed to create or update the split: " + error.message);
     }
   }
+
+  async getSplitByExpenseId(expenseId: string): Promise<Split | null> {
+    try {
+      const result = await this.db.find({
+        selector: {
+          expenses: { $in: [expenseId] },
+        },
+      });
+
+      if (result.docs.length > 0) {
+        return result.docs[0];
+      }
+      return null;
+    } catch (error) {
+      throw new Error("Failed to get split by expense ID: " + error.message);
+    }
+  }
 }

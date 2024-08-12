@@ -14,6 +14,7 @@ import { Navbar } from "src/components/organisms/Navbar";
 import styled, { useTheme } from "styled-components";
 import { useRouter } from "next/navigation";
 import { useFriend } from "src/hooks/useFriend";
+import { CustomLayout } from "src/components/organisms/Layout";
 
 const Container = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
-export const CreateFriendScreen = () => {
+export const CreateFriendScreenComponent = () => {
   const { createFriend } = useFriend(false, (err) => {
     toast.error(err);
   });
@@ -63,6 +64,7 @@ export const CreateFriendScreen = () => {
     });
   };
 
+  console.log({ "base.baseDarker1": base.baseDarker1 });
   return (
     <Container>
       <Navbar onBack={onBack} hideActions />
@@ -84,5 +86,13 @@ export const CreateFriendScreen = () => {
       </BaseScreenPadding>
       <Toaster />
     </Container>
+  );
+};
+
+export const CreateFriendScreen = () => {
+  return (
+    <CustomLayout>
+      <CreateFriendScreenComponent />
+    </CustomLayout>
   );
 };

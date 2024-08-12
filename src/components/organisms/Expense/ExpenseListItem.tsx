@@ -1,34 +1,84 @@
 import React from "react";
-import { TitleMedium } from "src/components/atoms/Typography/Typography";
+import {
+  TextCaption,
+  TitleMedium,
+  TitleSmall,
+} from "src/components/atoms/Typography/Typography";
 import { Expense } from "src/models/Expense";
-import styled from "styled-components";
+import { Split } from "src/models/Split";
+import styled, { useTheme } from "styled-components";
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
-  padding: 12px 16px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #e0e0e0;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
+  width: 100%;
+  gap: 12px;
 `;
 
-const LeftContainer = styled.div`
+const Left = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+
+  background: ${(props) => props.theme.gray.light};
+  justify-content: center;
+  align-items: center;
+
+  padding: 4px 6px;
+  border-radius: 4px;
 `;
+const Right = styled.div`
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+`;
+
+const MONTH_MAP = {
+  0: "Jan",
+  1: "Feb",
+  2: "Mar",
+  3: "Apr",
+  4: "May",
+  5: "Jun",
+  6: "Jul",
+  7: "Aug",
+  8: "Sep",
+  9: "Oct",
+  10: "Nov",
+  11: "Dec",
+};
 
 export const ExpenseListItem: React.FC<{
   expense: Expense;
-  expenseType: "owe" | "lend";
-}> = ({ expense }) => {
+  loggedInUserId: string;
+  friendName: string;
+  split: Split;
+}> = ({ expense, friendName, loggedInUserId, split }) => {
+  const { brand } = useTheme();
+  const borrower = expense.borrower_id === loggedInUserId ? "You" : friendName;
+  const lender = expense.lender_id === loggedInUserId ? "You" : friendName;
+  const splitCreatedOn = new Date(expense.created_at);
+
   return (
     <Container>
-      <LeftContainer>
-        <TitleMedium></TitleMedium>
-      </LeftContainer>
+      <Left>
+        <TitleMedium color={brand.primary}>
+          {splitCreatedOn.getDate()}
+        </TitleMedium>
+        <TextCaption color={brand.primary}>
+          {MONTH_MAP[splitCreatedOn.getMonth()]} {splitCreatedOn.getFullYear()}
+        </TextCaption>
+      </Left>
+      <Right>
+        <TitleSmall>{split.name}</TitleSmall>
+        <TextCaption>
+          {lender} lend {borrower} ₹{split.amount}
+        </TextCaption>
+      </Right>
     </Container>
   );
 };

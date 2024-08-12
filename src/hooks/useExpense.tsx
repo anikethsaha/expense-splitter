@@ -1,11 +1,13 @@
-import { useCallback, useState } from "react";
+import { use, useCallback, useState } from "react";
 import { useLoggedInUser } from "src/stores/User.store";
 import { ExpenseRepo } from "src/repos/ExpenseRepo";
 import { useRouter } from "next/navigation";
 import { Expense, Status } from "src/models/Expense";
 import { ExpenseHelper } from "src/helpers/ExpenseHelper";
+import { SplitRepo } from "src/repos/SplitRepo";
 
 const expenseRepo = new ExpenseRepo();
+const splitRepo = new SplitRepo();
 
 export const useExpense = (
   defaultLoadingState = false,
@@ -50,9 +52,18 @@ export const useExpense = (
     [currentUser]
   );
 
+  const getSplitsForExpenses = useCallback(async (expenses: Expense[]) => {
+    const promises = expenses.map((expense) =>
+      splitRepo.getSplitByExpenseId(expense.id)
+    );
+    const splits = await Promise.all(promises);
+    return splits;
+  }, []);
+
   return {
     getExpenseWithFriend,
     calculateOwingOrLending,
+    getSplitsForExpenses,
     loading,
   };
 };

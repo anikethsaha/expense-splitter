@@ -46,7 +46,7 @@ const Footer = styled.div`
   width: 100%;
 `;
 
-export const CreateGroup = () => {
+const CreateGroupComponent = () => {
   const router = useRouter();
   const { stroke } = useTheme();
   const errorCb = useCallback((err?: string) => {
@@ -69,60 +69,68 @@ export const CreateGroup = () => {
   };
 
   return (
-    <CustomLayout>
-      <Container>
-        <Navbar onBack={back} />
+    <Container>
+      <Navbar onBack={back} />
 
-        <BaseScreenPadding>
-          <TextSmall style={{}}>Create group</TextSmall>
-        </BaseScreenPadding>
-        <Wrapper>
-          <Input
-            onChange={setGroupName}
-            label="Group name"
-            size={"small"}
-            style={{
-              borderColor: stroke.light,
-            }}
-          />
-          <ExpensePlayerInput
-            preselectSelectedUsers={users}
-            inputProps={{
-              size: "small",
-              label: "Add members",
-            }}
-            noGroup
-            onUserSelect={(user) => {
-              setUsers([...users, user]);
-            }}
-            onUserDeSelect={(user) => {
-              setUsers((prev) => prev.filter((u) => u.id !== user.id));
-            }}
-          />
-        </Wrapper>
-        <BaseScreenPadding style={{ paddingBottom: 0 }}>
-          {users.length > 0 && <TextCaption>Selected Users</TextCaption>}
-        </BaseScreenPadding>
-        {users?.map((user, index) => (
-          <UserListItem
-            key={user.id ?? index}
-            user={user}
-            isLast
-            onSelect={() => {}}
-            onDeleted={() => {
-              setUsers((prev) => prev.filter((u) => u.id !== user.id));
-            }}
-          />
-        ))}
-        <Footer>
-          <Button
-            onClick={createGroupHandler}
-            text={loading ? "Loading ...." : "Create Group"}
-            rightText={`${users.length} members`}
-            style={{ borderRadius: 12 }}
-          />
-        </Footer>
-      </Container>
+      <BaseScreenPadding>
+        <TextSmall style={{}}>Create group</TextSmall>
+      </BaseScreenPadding>
+      <Wrapper>
+        <Input
+          onChange={setGroupName}
+          label="Group name"
+          size={"small"}
+          style={{
+            borderColor: stroke.light,
+          }}
+        />
+        <ExpensePlayerInput
+          preselectSelectedUsers={users}
+          inputProps={{
+            size: "small",
+            label: "Add members",
+          }}
+          noGroup
+          onUserSelect={(user) => {
+            setUsers([...users, user]);
+          }}
+          onUserDeSelect={(user) => {
+            setUsers((prev) => prev.filter((u) => u.id !== user.id));
+          }}
+        />
+      </Wrapper>
+      <BaseScreenPadding style={{ paddingBottom: 0 }}>
+        {users.length > 0 && <TextCaption>Selected Users</TextCaption>}
+      </BaseScreenPadding>
+      {users?.map((user, index) => (
+        <UserListItem
+          key={user.id ?? index}
+          user={user}
+          isLast
+          onSelect={() => {}}
+          onDeleted={() => {
+            setUsers((prev) => prev.filter((u) => u.id !== user.id));
+          }}
+        />
+      ))}
+      <Footer>
+        <Button
+          onClick={createGroupHandler}
+          text={loading ? "Loading ...." : "Create Group"}
+          rightText={`${users.length} members`}
+          style={{ borderRadius: 12 }}
+        />
+      </Footer>
+    </Container>
+  );
+};
+
+export const CreateGroup = () => {
+  return (
+    <CustomLayout>
+      <CreateGroupComponent />
     </CustomLayout>
   );
 };
+
+export default CreateGroup;

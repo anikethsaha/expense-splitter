@@ -26,7 +26,7 @@ const OptionDropdownContainer = styled.div`
   position: absolute;
   width: 100%;
   z-index: 1;
-  background-color: white;
+  background-color: ${(props) => props.theme.brand.brandOpposite};
 
   border-radius: 8px;
   border-top-right-radius: 0;
