@@ -65,13 +65,24 @@ export const Navbar: React.FC<{
       <Container isProgress={!!progress}>
         {!!progress && <ProgressBar progress={progress} />}
         <TitleWrapper>
-          {!!onBack && <IoIosArrowRoundBack size={24} color={brand.primary} />}
+          {!!onBack && (
+            <IoIosArrowRoundBack
+              onClick={onBack}
+              size={24}
+              color={brand.primary}
+            />
+          )}
           <TitleMedium color={brand.primary}>Split Expense</TitleMedium>
         </TitleWrapper>
         {!hideActions && (
           <IconContainer>
             {!!onAddClick && (
-              <FiPlus size={24} color={brand.primary} onClick={onAddClick} />
+              <FiPlus
+                size={24}
+                style={{ cursor: "pointer" }}
+                color={brand.primary}
+                onClick={onAddClick}
+              />
             )}
             <LuSettings
               size={24}

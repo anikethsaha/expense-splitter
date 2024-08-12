@@ -66,11 +66,35 @@ export const useExpense = (
     return splits;
   }, []);
 
+  const settleExpenses = useCallback(
+    async (expenses: Expense[]) => {
+      if (!currentUser) {
+        router.replace("/login");
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const promises = expenses.map((expense) =>
+          expenseRepo.updateExpenseStatus(expense.id, Status.PAID)
+        );
+        await Promise.all(promises);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        onError?.("Error settling expenses: " + error.message);
+      }
+    },
+    [currentUser]
+  );
+
   return {
     getExpenseWithFriend,
     calculateOwingOrLending,
     getSplitsForExpenses,
     loading,
     getAllMyExpenses,
+    settleExpenses,
   };
 };

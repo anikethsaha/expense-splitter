@@ -40,6 +40,18 @@ export class ExpenseRepo {
     }
   }
 
+  async updateExpenseStatus(expenseId: string, status: Status) {
+    try {
+      const response = await this.db.putIfNotExists(expenseId, {
+        status,
+      });
+
+      return response;
+    } catch (error) {
+      throw new Error("Failed to update the expense status: " + error.message);
+    }
+  }
+
   async getAllExpensesByIds(expenseIds: string[]): Promise<Expense[]> {
     try {
       const result = await this.db.find({

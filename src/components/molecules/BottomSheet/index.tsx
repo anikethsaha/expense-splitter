@@ -17,6 +17,7 @@ export const BottomSheet: React.FC<SheetProps> = (props) => {
         <Sheet.Header />
         <Sheet.Content>{props.children}</Sheet.Content>
       </Sheet.Container>
+
       <Sheet.Backdrop />
     </Sheet>
   );

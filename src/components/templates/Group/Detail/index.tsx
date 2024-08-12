@@ -14,6 +14,7 @@ import {
 import { ExpenseListItem } from "src/components/organisms/Expense/ExpenseListItem";
 import { CustomLayout } from "src/components/organisms/Layout";
 import { Navbar } from "src/components/organisms/Navbar";
+import { SettleExpense } from "src/components/organisms/Settle/SettleExpense";
 import { ExpenseHelper } from "src/helpers/ExpenseHelper";
 import { useGroup } from "src/hooks/useGroup";
 import { Expense } from "src/models/Expense";
@@ -122,7 +123,11 @@ const GroupDetailScreenComponent: React.FC<GroupDetailScreenProps> = ({
 
   return (
     <Container>
-      <Navbar onBack={() => router.replace("/")} />
+      <Navbar
+        onBack={() => {
+          router.replace("/");
+        }}
+      />
       <Header>
         {rootLoading ? (
           <FullSectionShimmer />
@@ -172,6 +177,7 @@ const GroupDetailScreenComponent: React.FC<GroupDetailScreenProps> = ({
                   friendName={otherUserInfo.name}
                   split={split}
                   group
+                  allowSettle
                 />
               );
             })}

@@ -58,6 +58,7 @@ export const Activities = () => {
           {splits.map((split, i) =>
             expenses[i] ? (
               <ExpenseListItem
+                allowSettle
                 key={split.id}
                 expense={expenses[i]}
                 loggedInUserId={currentUser?.id!}

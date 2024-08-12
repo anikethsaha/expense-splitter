@@ -12,6 +12,7 @@ import { useLoggedInUser } from "src/stores/User.store";
 import { styled, useTheme } from "styled-components";
 import { ExpenseWithFriendList } from "../Expense/Lists/ExpenseWithFriendList";
 import { BottomSheet } from "src/components/molecules/BottomSheet";
+import { SettleExpense } from "../Settle/SettleExpense";
 
 const Container = styled.div`
   display: flex;
@@ -83,11 +84,28 @@ export const FriendSplitListItem: React.FC<{
         isOpen={showList}
         onClose={() => setShowList(false)}
       >
-        <ExpenseWithFriendList
-          text={secondaryText}
-          expenses={expenses}
-          friend={friend}
-        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+            justifyContent: "space-between",
+            height: "100%",
+          }}
+        >
+          <ExpenseWithFriendList
+            text={secondaryText}
+            expenses={expenses}
+            friend={friend}
+          />
+
+          <div>
+            <SettleExpense
+              onCancel={() => setShowList(false)}
+              expenses={expenses}
+            />
+          </div>
+        </div>
       </BottomSheet>
     </>
   );

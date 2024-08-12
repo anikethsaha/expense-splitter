@@ -24,7 +24,15 @@ const ButtonWrapper = styled.button<{
 }>`
   cursor: pointer;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-  background-color: ${(props) => props.theme.brand.primary};
+  background-color: ${(props) =>
+    props.type === "secondary"
+      ? props.theme.brand.alternative
+      : props.theme.brand.primary};
+  border: 1px solid
+    ${(props) =>
+      props.type !== "secondary"
+        ? props.theme.brand.alternative
+        : props.theme.brand.primary};
   width: 100%;
   border-radius: 4px;
   padding-left: 24px;
@@ -38,7 +46,10 @@ const ButtonWrapper = styled.button<{
   align-items: center;
   gap: 6px;
   position: relative;
-  color: ${(props) => props.theme.brand.alternative};
+  color: ${(props) =>
+    props.type === "secondary"
+      ? props.theme.brand.primary
+      : props.theme.brand.alternative};
 `;
 
 const ButtonText = styled(TitleSmall)`
@@ -101,7 +112,7 @@ const Button: FC<ButtonProps> = ({
         {text && (
           <ButtonText
             style={{ letterSpacing: "0.5px" }}
-            color={brand.alternative}
+            color={type === "secondary" ? brand.primary : brand.alternative}
           >
             {text}
           </ButtonText>
