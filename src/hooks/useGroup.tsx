@@ -28,7 +28,6 @@ export const useGroup = (
       const userIds: string[] = [];
       for (const user of users) {
         if (!user.id) {
-          console.log({ user });
           // If user ID is null, create a new user
           const createdUser = await userRepo.createOrUpdateUser(
             user.phone_number,
@@ -64,10 +63,9 @@ export const useGroup = (
         created_by: currentUser?.id,
         is_active: true,
       };
-      console.log({ newGroup });
+
       const groupResponse = await groupRepo.createGroup(newGroup);
 
-      console.log("Group created successfully:", groupResponse);
       return groupResponse;
     } catch (err) {
       onError(err instanceof Error ? err.message : "An error occurred");

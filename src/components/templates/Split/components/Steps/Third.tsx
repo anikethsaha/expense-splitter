@@ -11,8 +11,6 @@ import {
 } from "src/components/atoms/Typography/Typography";
 import { TAB, Tabs } from "src/components/molecules/Tab";
 import { SplitType } from "src/models/Split";
-import { styled } from "styled-components";
-import { UserRadioList } from "../../../../molecules/Lists/UserRadioList";
 import { useSplitCreatorHelper } from "../../hooks/useSplitCreatorHelper";
 import toast, { Toaster } from "react-hot-toast";
 import { User } from "src/models/user";
@@ -20,44 +18,12 @@ import { BaseScreenPadding } from "src/components/atoms/Common/Padding";
 import { useDispatch } from "react-redux";
 import { splitCreatorSlice } from "src/stores/SplitCreator.store";
 import { UserListItem } from "src/components/atoms/ListItems/UserListItem";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  justify-content: start;
-  align-items: start;
-  width: 100%;
-  box-sizing: border-box;
-`;
-
-const AmountSplitWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  gap: 6px;
-`;
-
-const TotalPercentageDetail = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
-
-const SecondaryFooter = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  justify-content: flex-end;
-  align-items: center;
-`;
+import {
+  Container,
+  AmountSplitWrapper,
+  SecondaryFooter,
+  TotalPercentageDetail,
+} from "./Third.styled";
 
 const SplitTypeTabOptions: TAB[] = [
   {
@@ -158,7 +124,6 @@ export const ThirdStepSplitCreator = () => {
           <Tabs
             list={SplitTypeTabOptions}
             onTabChange={(tabId) => {
-              console.log({ tabId });
               selectSplitType(tabId as SplitType, members);
             }}
           />

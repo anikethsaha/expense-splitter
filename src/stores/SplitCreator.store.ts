@@ -66,7 +66,6 @@ export const splitCreatorSlice = createSlice({
         };
       }>
     ) => {
-      console.log({ "action.payload": action.payload });
       state.splitType = action.payload.type;
 
       state.splitInfo = {

@@ -32,6 +32,7 @@ export const SettleExpense: React.FC<{
   const allSettled = expenses.every((e) => e.status === Status.PAID);
 
   const recordSettlement = () => {
+    console.log({ expenses });
     settleExpenses(expenses).then(() => {
       toast.success("Settled successfully");
       onCancel?.();

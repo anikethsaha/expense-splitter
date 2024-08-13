@@ -42,8 +42,9 @@ export class ExpenseRepo {
 
   async updateExpenseStatus(expenseId: string, status: Status) {
     try {
-      const response = await this.db.putIfNotExists(expenseId, {
-        status,
+      const response = await this.db.upsert(expenseId, (doc) => {
+        doc.status = status;
+        return doc;
       });
 
       return response;
@@ -67,8 +68,9 @@ export class ExpenseRepo {
 
   async addDeleteStatusExpense(expenseId: string) {
     try {
-      const response = await this.db.putIfNotExists(expenseId, {
-        status: Status.DELETE,
+      const response = await this.db.upsert(expenseId, (doc) => {
+        doc.status = Status.DELETE;
+        return doc;
       });
 
       return response;
@@ -99,7 +101,6 @@ export class ExpenseRepo {
     userId1: string,
     userId2: string
   ): Promise<Expense[]> {
-    console.log({ userId1, userId2 });
     try {
       const result = await expenseDbInstance.find({
         selector: {
@@ -110,7 +111,6 @@ export class ExpenseRepo {
         },
       });
 
-      console.log({ result });
       return result.docs as Expense[];
     } catch (error) {
       throw new Error(

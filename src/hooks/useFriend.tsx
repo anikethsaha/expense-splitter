@@ -20,7 +20,6 @@ export const useFriend = (
     async (phoneNumber: string, name?: string) => {
       setLoading(true);
       try {
-        console.log({ phoneNumber, name });
         return await userRepo.createOrUpdateUser(phoneNumber, name);
       } catch (error) {
         onError?.("Error creating or updating user: " + error);
@@ -41,11 +40,14 @@ export const useFriend = (
 
       setLoading(true);
       try {
+        console.log({ newFriendPhone, newFriendName });
         // Ensure the friend user exists
         const secondUser = await createUserIfNotExists(
           newFriendPhone,
           newFriendName
         );
+
+        console.log({ secondUser });
 
         if (!secondUser) {
           onError?.("Error creating friend: User not found or created");

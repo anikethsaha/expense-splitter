@@ -3,6 +3,7 @@ import { debounce } from "src/utils/debounce";
 import styled, { useTheme } from "styled-components";
 import {
   DEFAULT_THEME,
+  TextCaption,
   TextSmall,
   TitleSmall,
   typographyStyles,
@@ -12,7 +13,7 @@ export interface OwnInputProps {
   defaultValue?: string;
   placeholder?: string;
   onChange?: (value: string) => void;
-  type?: "text" | "number";
+  type?: "text" | "number" | "tel";
   inputColor?: string;
   label?: string;
   rightElement?: React.ReactNode;
@@ -83,6 +84,7 @@ export const Input: React.FC<InputProps> = ({
   size = "default",
   ...inputProps
 }) => {
+  const [error, setError] = useState("");
   const { base } = useTheme();
   const [value, setValue] = useState(defaultValue);
   const defaultValueUsedRef = React.useRef(false);
@@ -98,18 +100,28 @@ export const Input: React.FC<InputProps> = ({
 
   const handleBlur = () => {
     if (onChange) {
+      if (type === "tel" && value.length > 10) {
+        setError("Phone number should be 10 digits");
+        return;
+      }
       onChange(value);
     }
   };
 
   const debouncedOnChange = debounce((newValue: string) => {
     if (onChange) {
+      if (type === "tel" && newValue.length > 10) {
+        setError("Phone number should be 10 digits");
+        return;
+      }
       onChange(newValue);
     }
   }, 300);
 
   const handleDebounceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
+
+    setError("");
     setValue(newValue);
     debouncedOnChange(newValue);
   };
@@ -132,6 +144,7 @@ export const Input: React.FC<InputProps> = ({
       {rightElement && (
         <RightContainer size={size}>{rightElement}</RightContainer>
       )}
+      {error && <TextCaption color={"red"}>{error}</TextCaption>}
     </InputWrapper>
   );
 };

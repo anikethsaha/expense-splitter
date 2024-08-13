@@ -5,29 +5,8 @@ import Button from "src/components/atoms/Buttons";
 import { Input } from "src/components/atoms/Input";
 import { TitleMedium } from "src/components/atoms/Typography/Typography";
 import { useAuth } from "src/hooks/useAuth";
-import { User } from "src/models/user";
-import styled from "styled-components";
 import { AppContainer } from "src/components/organisms/Layout/AppContainer";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-`;
-
-const LoginFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-  width: 100%;
-  padding: 24px;
-  box-sizing: border-box;
-  gap: 12px;
-`;
+import { Container, LoginFormContainer } from "./Login.styled";
 
 export const LoginScreen = () => {
   const router = useRouter();
@@ -53,7 +32,7 @@ export const LoginScreen = () => {
         <LoginFormContainer>
           <TitleMedium>Please Login</TitleMedium>{" "}
           <Input
-            type="number"
+            type="tel"
             maxLength={10}
             onChange={(val) => setPhoneNumber(val)}
           />

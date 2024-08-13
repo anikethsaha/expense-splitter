@@ -72,7 +72,6 @@ export const useSplit = (
         currentUser.id
       );
 
-      console.log({ allMyGroups });
       if (allMyGroups?.length > 0) {
         groups = [...groups, ...allMyGroups];
       }

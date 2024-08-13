@@ -4,45 +4,21 @@ import { FiEdit2 } from "react-icons/fi";
 
 import {
   TextCaption,
+  TextSmall,
   TitleMedium,
   TitleSmall,
 } from "src/components/atoms/Typography/Typography";
 import { BottomSheet } from "src/components/molecules/BottomSheet";
-import { Expense } from "src/models/Expense";
+import { Expense, Status } from "src/models/Expense";
 import { Split } from "src/models/Split";
 import styled, { useTheme } from "styled-components";
 import { SettleExpense } from "../Settle/SettleExpense";
-
-const Container = styled.div<{ allowSettle?: boolean }>`
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  box-sizing: border-box;
-  width: 100%;
-  gap: 12px;
-  cursor: ${(props) => (props.allowSettle ? "pointer" : "default")};
-`;
-
-const Left = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  background: ${(props) => props.theme.gray.light};
-  justify-content: center;
-  align-items: center;
-
-  padding: 4px 6px;
-  border-radius: 4px;
-`;
-const Right = styled.div`
-  height: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-`;
+import {
+  Container,
+  Left,
+  Right,
+  FullScreenBackDrop,
+} from "./ExpenseListItem.styled";
 
 const MONTH_MAP = {
   0: "Jan",
@@ -58,18 +34,6 @@ const MONTH_MAP = {
   10: "Nov",
   11: "Dec",
 };
-
-const FullScreenBackDrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 100;
-`;
 
 export const ExpenseListItem: React.FC<{
   expense: Expense;
@@ -89,7 +53,7 @@ export const ExpenseListItem: React.FC<{
   split,
 }) => {
   const router = useRouter();
-  const { brand } = useTheme();
+  const { brand, base } = useTheme();
   const borrower =
     expense.borrower_id === loggedInUserId ? (group ? "" : "You") : friendName;
   const lender =
@@ -127,7 +91,19 @@ export const ExpenseListItem: React.FC<{
           <TitleSmall>{split.name}</TitleSmall>
           <TextCaption>{text}</TextCaption>
         </Right>
-        {!noEdit && (
+        {expense.status === Status.PAID && (
+          <TextSmall
+            style={{
+              padding: "2px 6px",
+              background: base.base1,
+              color: brand.alternative,
+              borderRadius: 4,
+            }}
+          >
+            Settled
+          </TextSmall>
+        )}
+        {!noEdit && expense.status === Status.OPEN && (
           <div>
             <FiEdit2
               style={{ cursor: "pointer" }}

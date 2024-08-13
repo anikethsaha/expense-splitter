@@ -48,6 +48,8 @@ export class UserRepo {
         limit: 1,
       });
 
+      console.log({ result, phone });
+
       if (result.docs.length > 0) {
         return result.docs[0];
       } else {
@@ -67,13 +69,11 @@ export class UserRepo {
       if (updateUser.id) delete updateUser["id"];
       if (updateUser._rev) delete updateUser["_id"];
       if (updateUser?._id) delete updateUser["_rev"];
-      console.log("updateUser upsert", { updateUser });
+
       const response = await this.db.putIfNotExists(id, { ...updateUser });
 
-      console.log("updateUser upsert", { response });
       return response;
     } catch (error) {
-      console.log({ error });
       throw new Error("Failed to update user: " + error.message);
     }
   }
@@ -95,6 +95,7 @@ export class UserRepo {
       const user = await this.getUserByPhone(phone_number);
 
       if (user) {
+        console.log("user found", { user });
         // User exists, update the user details
         user.name = name || user.name;
         const response = await this.updateUser(user);

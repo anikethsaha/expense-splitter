@@ -15,36 +15,8 @@ import { CustomLayout } from "src/components/organisms/Layout";
 import { Navbar } from "src/components/organisms/Navbar";
 import { useGroup } from "src/hooks/useGroup";
 import { User } from "src/models/user";
-import { styled, useTheme } from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-sizing: border-box;
-  height: 100%;
-  position: relative;
-  width: 100%;
-`;
-
-const Wrapper = styled(BaseScreenPadding)`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-sizing: border-box;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  justify-content: flex-end;
-  padding: 12px;
-  box-sizing: border-box;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-`;
+import { useTheme } from "styled-components";
+import { Container, Wrapper, Footer } from "./CreateScreen.styled";
 
 const CreateGroupComponent = () => {
   const router = useRouter();

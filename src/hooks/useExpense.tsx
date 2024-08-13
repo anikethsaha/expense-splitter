@@ -28,7 +28,6 @@ export const useExpense = (
       setLoading(true);
 
       try {
-        console.log({ currentUser });
         const expenses = await expenseRepo.findExpensesBetweenUsers(
           currentUser.id,
           userId

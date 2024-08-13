@@ -52,7 +52,7 @@ export class SplitHelper {
         };
       });
     }
-    console.log({ splitInfo });
+
     return splitInfo;
   };
 
@@ -257,20 +257,18 @@ export class SplitHelper {
         )
       );
       const newFriendWithPaidBy = await Promise.all(friendPromises);
-      console.log({ newFriendWithPaidBy });
     }
 
     // handle new users
 
     const newUsers = users.filter((user) => !user.id);
-    console.log({ newUsers });
+
     if (newUsers.length > 0) {
       const promises = newUsers.map((user) =>
         userRepo.createOrUpdateUser(user.phone_number!, user.name)
       );
 
       const newCompleteUsers = await Promise.all(promises);
-      console.log({ newCompleteUsers });
 
       // create friends with newUsers.id with paidBy.id
 
@@ -282,7 +280,6 @@ export class SplitHelper {
           user.name
         )
       );
-      console.log({ newFriendPromises });
 
       await Promise.all(newFriendPromises);
 
@@ -298,8 +295,6 @@ export class SplitHelper {
         return user;
       });
     }
-
-    console.log({ users });
 
     const partialExpenses: Omit<FrontendSplit, "id">[] = this.getNewExpenses(
       users,

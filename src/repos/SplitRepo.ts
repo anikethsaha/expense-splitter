@@ -48,13 +48,13 @@ export class SplitRepo {
             expenses: expenseIds,
           };
 
-          const response = await this.db.putIfNotExists(split.id, {
-            ...newSplit,
-            _id: split.id,
-            _rev: existingSplit._rev,
+          const response = await this.db.upsert(split.id, (doc) => {
+            doc = { ...doc, ...newSplit, updated_at: new Date().toISOString() };
+            return doc;
+            // _id: split.id,
+            // _rev: existingSplit._rev,
           });
 
-          console.log("Split updated :", response);
           for (const id of expensesIdsToDelete) {
             await this.expenseRepo.addDeleteStatusExpense(id);
           }
@@ -80,7 +80,7 @@ export class SplitRepo {
 
       // Save split to the database
       const response = await this.db.put({ ...newSplit, _id: id });
-      console.log("Split created :", response);
+
       return id;
     } catch (error) {
       throw new Error("Failed to create or update the split: " + error.message);
@@ -92,12 +92,20 @@ export class SplitRepo {
       if (split.id) {
         const existingSplit = await this.db.get(split.id);
         if (existingSplit) {
-          await this.db.putIfNotExists(split.id, {
-            ...split,
-            _id: split.id,
-            _rev: existingSplit._rev,
-            updated_at: new Date().toISOString(),
+          const response = await this.db.upsert(split.id, (doc) => {
+            doc = {
+              ...doc,
+              ...split,
+              _id: existingSplit.id,
+              _rev: existingSplit._rev,
+              updated_at: new Date().toISOString(),
+            };
+            return doc;
           });
+
+          if (!response.updated) {
+            throw new Error("Failed to update the split");
+          }
 
           return split.id;
         }

@@ -30,33 +30,6 @@ const Container = styled.div`
   box-sizing: border-box;
 `;
 
-const AmountSplitWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  gap: 6px;
-  margin-top: 24px;
-`;
-
-const SplitTypeTabOptions: TAB[] = [
-  {
-    title: "Equal",
-    id: SplitType.EQUAL,
-    icon: FaEquals,
-  },
-  {
-    title: "Percentage",
-    id: SplitType.PERCENTAGE,
-    icon: AiOutlinePercentage,
-  },
-  {
-    title: "Exact",
-    id: SplitType.ABSOLUTE,
-    icon: GoNumber,
-  },
-];
-
 export const SecondStepSplitCreator = () => {
   const errorCb = useCallback((err: string) => {
     toast.error(err);
@@ -76,7 +49,6 @@ export const SecondStepSplitCreator = () => {
     dispatcher(splitCreatorSlice.actions.updatePaidBy({ ...user }));
   };
 
-  console.log({ splitName, members });
   return (
     <Container>
       <BaseScreenPadding
@@ -128,14 +100,6 @@ export const SecondStepSplitCreator = () => {
         onChange={handlePaidBySelection}
       />
 
-      {/* <AmountSplitWrapper>
-        <Tabs
-          list={SplitTypeTabOptions}
-          onTabChange={(tabId) => setSplitType(tabId as SplitType)}
-        />
-
-        {splitType === SplitType.EQUAL && <></>}
-      </AmountSplitWrapper> */}
       <Toaster />
     </Container>
   );

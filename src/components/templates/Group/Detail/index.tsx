@@ -14,7 +14,6 @@ import {
 import { ExpenseListItem } from "src/components/organisms/Expense/ExpenseListItem";
 import { CustomLayout } from "src/components/organisms/Layout";
 import { Navbar } from "src/components/organisms/Navbar";
-import { SettleExpense } from "src/components/organisms/Settle/SettleExpense";
 import { ExpenseHelper } from "src/helpers/ExpenseHelper";
 import { useGroup } from "src/hooks/useGroup";
 import { Expense } from "src/models/Expense";
@@ -22,41 +21,7 @@ import { Group } from "src/models/Group";
 import { Split } from "src/models/Split";
 import { useLoggedInUser } from "src/stores/User.store";
 import styled, { useTheme } from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  gap: 4px;
-`;
-
-const Header = styled(BaseScreenPadding)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-
-  .left {
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
-  }
-
-  .right {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    background: ${(props) => props.theme.gray.light};
-    justify-content: center;
-    align-items: center;
-
-    padding: 4px 6px;
-    border-radius: 4px;
-  }
-`;
+import { Container, Header } from "./Detail.styled";
 
 type GroupDetailScreenProps = { id: string };
 

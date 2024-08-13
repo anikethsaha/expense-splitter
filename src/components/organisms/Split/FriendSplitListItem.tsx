@@ -13,22 +13,7 @@ import { styled, useTheme } from "styled-components";
 import { ExpenseWithFriendList } from "../Expense/Lists/ExpenseWithFriendList";
 import { BottomSheet } from "src/components/molecules/BottomSheet";
 import { SettleExpense } from "../Settle/SettleExpense";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  padding: 12px 16px;
-  box-sizing: border-box;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const TextWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
+import { Container, TextWrapper } from "./FriendSplitListItem.styled";
 
 export const FriendSplitListItem: React.FC<{
   friend: Friend;

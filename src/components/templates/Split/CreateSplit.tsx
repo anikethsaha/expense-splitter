@@ -14,41 +14,7 @@ import { CustomLayout } from "src/components/organisms/Layout";
 import { Provider } from "react-redux";
 import { store } from "src/stores/redux.store";
 import { FullSectionShimmer } from "src/components/atoms/Shimmer/FullScreen";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-`;
-
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
-  width: 100%;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  justify-content: flex-end;
-  padding: 12px;
-  box-sizing: border-box;
-`;
-
-const RightElement = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: end;
-  justify-content: center;
-  width: 100%;
-  position: relative;
-  flex: 1;
-`;
+import { Container, Body, Footer, RightElement } from "./CreateSplit.styled";
 
 type Props = {
   id?: string;

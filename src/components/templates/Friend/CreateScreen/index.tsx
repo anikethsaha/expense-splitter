@@ -5,40 +5,13 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 import { BaseScreenPadding } from "src/components/atoms/Common/Padding";
 import { Input } from "src/components/atoms/Input";
-import {
-  TitleLarge,
-  TitleMedium,
-  TitleSmall,
-} from "src/components/atoms/Typography/Typography";
+import { TitleMedium } from "src/components/atoms/Typography/Typography";
 import { Navbar } from "src/components/organisms/Navbar";
 import styled, { useTheme } from "styled-components";
 import { useRouter } from "next/navigation";
 import { useFriend } from "src/hooks/useFriend";
 import { CustomLayout } from "src/components/organisms/Layout";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  justify-content: start;
-  align-items: start;
-  width: 100%;
-  box-sizing: border-box;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-
-  margin-top: 24px;
-  width: 100%;
-`;
+import { Container, InputWrapper } from "./FriendCreateScreen.styled";
 
 export const CreateFriendScreenComponent = () => {
   const { createFriend } = useFriend(false, (err) => {
@@ -64,7 +37,6 @@ export const CreateFriendScreenComponent = () => {
     });
   };
 
-  console.log({ "base.baseDarker1": base.baseDarker1 });
   return (
     <Container>
       <Navbar onBack={onBack} hideActions />
@@ -72,7 +44,7 @@ export const CreateFriendScreenComponent = () => {
         <TitleMedium color={base.baseDarker1}>Add Friend</TitleMedium>
         <InputWrapper>
           <Input
-            type={"number"}
+            type={"tel"}
             onChange={setPhoneNumber}
             label={"Phone number"}
           />

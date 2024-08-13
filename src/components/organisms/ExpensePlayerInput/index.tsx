@@ -3,39 +3,17 @@ import toast, { Toaster } from "react-hot-toast";
 import { MdOutlineClose } from "react-icons/md";
 
 import { Input, InputProps } from "src/components/atoms/Input";
-import { v4 as uuidv4 } from "uuid";
 import { Group } from "src/models/Group";
 import { User } from "src/models/user";
 import { styled, useTheme } from "styled-components";
-import { user1, user2, user3 } from "src/seed";
-import {
-  TextCaption,
-  TextSmall,
-} from "src/components/atoms/Typography/Typography";
 import { useSplit } from "src/hooks/useSplit";
 
 import { UserListItem } from "src/components/atoms/ListItems/UserListItem";
 import { GroupListItem } from "src/components/atoms/ListItems/GroupListItem";
-
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const OptionDropdownContainer = styled.div`
-  position: absolute;
-  width: 100%;
-  z-index: 1;
-  background-color: ${(props) => props.theme.brand.brandOpposite};
-
-  border-radius: 8px;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-  box-shadow: -1px 4px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e1e0e0;
-  border-top: 0;
-  box-sizing: border-box;
-`;
+import {
+  Container,
+  OptionDropdownContainer,
+} from "./ExpensePlayerInput.styled";
 
 /**
  * this is the component that returns all players that can be involved in the expense
